@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechFit - Área do Aluno</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2A9D8F;
+            --primary-dark: #21867A;
+            --secondary: #E76F51;
+            --dark: #264653;
+            --light: #F8F9FA;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark) 0%, #1a3341 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .aluno-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .logo h1 {
+            font-weight: 800;
+            color: var(--dark);
+            font-size: 36px;
+        }
+        
+        .logo span {
+            color: var(--primary);
+        }
+        
+        .user-info {
+            text-align: center;
+        }
+        
+        .user-name {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .user-plan {
+            color: #6C757D;
+            margin-bottom: 15px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            margin-bottom: 20px;
+            border: none;
+        }
+        
+        .card-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #6C757D;
+            font-size: 0.9rem;
+        }
+        
+        .workout-day {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .workout-day:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .day-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .exercise-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .exercise-item:last-child {
+            border-bottom: none;
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .nav-tabs {
+            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        
+        .nav-tabs .nav-link {
+            color: #6C757D;
+            font-weight: 600;
+            border: none;
+            padding: 10px 20px;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            background: transparent;
+        }
+        
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+        
+        .class-time {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .class-name {
+            color: #6C757D;
+            font-size: 0.9rem;
+        }
+        
+        .meal-plan {
+            margin-bottom: 20px;
+        }
+        
+        .meal-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .meal-items {
+            color: #6C757D;
+            font-size: 0.9rem;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aluno-container">
+        <div class="header">
+            <div class="logo">
+                <h1>TECH<span>FIT</span></h1>
+                <div class="fitness-icon">
+                    <i class="fas fa-dumbbell" style="font-size: 40px; color: var(--primary);"></i>
+                </div>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-name">Gabriel</div>
+                <div class="user-plan">Plano: Premium</div>
+            </div>
+        </div>
+
+        
+        <div class="row">
+         
+            <div class="col-md-8">
+               
+                <!-- <div class="card">
+                    <h3 class="card-title">Meu Progresso</h3>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">1,248</div>
+                            <div class="stat-label">Calorias Queimadas</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">12/16</div>
+                            <div class="stat-label">Treinos Concluídos</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">-2.3kg</div>
+                            <div class="stat-label">Perda de Peso</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">78%</div>
+                            <div class="stat-label">Frequência Cardíaca</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary-custom">
+                        <i class="fas fa-chart-line me-2"></i>Ver Progresso Completo
+                    </button>
+                </div> --!>
+
+                <!-- Plano de Treino -->
+                <div class="card">
+                    <h3 class="card-title">Meu Plano de Treino</h3>
+                    
+                    <div class="workout-day">
+                        <div class="day-title">Segunda-feira - Peito e Tríceps</div>
+                        <div class="exercise-item">
+                            <span>Supino Reto</span>
+                            <span>4x12</span>
+                        </div>
+                        <div class="exercise-item">
+                            <span>Supino Inclinado</span>
+                            <span>3x10</span>
+                        </div>
+                        <div class="exercise-item">
+                            <span>Tríceps Corda</span>
+                            <span>3x15</span>
+                        </div>
+                    </div>
+                    
+                    <div class="workout-day">
+                        <div class="day-title">Quarta-feira - Costas e Bíceps</div>
+                        <div class="exercise-item">
+                            <span>Puxada alta</span>
+                            <span>4x12</span>
+                        </div>
+                        <div class="exercise-item">
+                            <span>Remada Curvada</span>
+                            <span>3x10</span>
+                        </div>
+                        <div class="exercise-item">
+                            <span>Rosca Direta</span>
+                            <span>3x12</span>
+                        </div>
+                    </div>
+                    
+                    <div class="workout-day">
+                        <div class="day-title">Sexta-feira - Pernas e Ombros</div>
+                        <div class="exercise-item">
+                            <span>Agachamento Livre</span>
+                            <span>4x10</span>
+                        </div>
+                        <div class="exercise-item">
+                            <span>Leg Press</span>
+                            <span>3x12</span>
+                        </div>
+                        <div class="exercise-item">
+                            <span>Desenvolvimento</span>
+                            <span>3x10</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary-custom mt-3">
+                        <i class="fas fa-dumbbell me-2"></i>Iniciar Treino de Hoje
+                    </button>
+                </div>
+            </div>
+
+            <!-- Coluna Direita -->
+        <!-- <div class="col-md-4">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="schedule-tab" data-bs-toggle="tab" data-bs-target="#schedule" type="button" role="tab">
+                            <i class="fas fa-calendar me-1"></i>Aulas
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="nutrition-tab" data-bs-toggle="tab" data-bs-target="#nutrition" type="button" role="tab">
+                            <i class="fas fa-utensils me-1"></i>Nutrição
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+
+                    <div class="tab-pane fade show active" id="schedule" role="tabpanel">
+                        <div class="card">
+                            <h3 class="card-title">Próximas Aulas</h3>
+                            
+                            <div class="schedule-item">
+                                <div>
+                                    <div class="class-time">18:00 - 19:00</div>
+                                    <div class="class-name">Yoga</div>
+                                </div>
+                                <div>
+                                    <span class="badge bg-success">Confirmada</span>
+                                </div>
+                            </div>
+                            
+                            <div class="schedule-item">
+                                <div>
+                                    <div class="class-time">19:30 - 20:30</div>
+                                    <div class="class-name">Spinning</div>
+                                </div>
+                                <div>
+                                    <span class="badge bg-warning text-dark">Pendente</span>
+                                </div>
+                            </div>
+                            
+                            <div class="schedule-item">
+                                <div>
+                                    <div class="class-time">08:00 - 09:00</div>
+                                    <div class="class-name">Pilates</div>
+                                </div>
+                                <div>
+                                    <span class="badge bg-success">Confirmada</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary-custom mt-3">
+                                <i class="fas fa-plus me-2"></i>Agendar Nova Aula
+                            </button>
+                        </div>
+                    </div>
+
+                     Plano Nutricional 
+                    <div class="tab-pane fade" id="nutrition" role="tabpanel">
+                        <div class="card">
+                            <h3 class="card-title">Plano Alimentar de Hoje</h3>
+                            
+                            <div class="meal-plan">
+                                <div class="meal-title">Café da Manhã (07:00)</div>
+                                <div class="meal-items">Ovos mexidos, aveia, frutas</div>
+                            </div>
+                            
+                            <div class="meal-plan">
+                                <div class="meal-title">Almoço (12:30)</div>
+                                <div class="meal-items">Frango grelhado, arroz integral, salada</div>
+                            </div>
+                            
+                            <div class="meal-plan">
+                                <div class="meal-title">Lanche (16:00)</div>
+                                <div class="meal-items">Iogurte natural, whey protein</div>
+                            </div>
+                            
+                            <div class="meal-plan">
+                                <div class="meal-title">Jantar (19:30)</div>
+                                <div class="meal-items">Salmão, batata doce, legumes</div>
+                            </div>
+                            
+                            <button class="btn btn-primary-custom mt-3">
+                                <i class="fas fa-utensils me-2"></i>Registrar Refeição
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ações Rápidas 
+                <div class="card">
+                    <h3 class="card-title">Ações Rápidas</h3>
+                    
+                    <button class="btn btn-primary-custom mb-2">
+                        <i class="fas fa-dumbbell me-2"></i>Iniciar Treino
+                    </button>
+                    
+                    <button class="btn btn-primary-custom mb-2">
+                        <i class="fas fa-utensils me-2"></i>Registrar Refeição
+                    </button>
+                    
+                    <button class="btn btn-primary-custom mb-2">
+                        <i class="fas fa-weight me-2"></i>Registrar Peso
+                    </button>
+                    
+                    <button class="btn btn-primary-custom">
+                        <i class="fas fa-calendar me-2"></i>Agendar Aula
+                    </button>
+                </div>
+            </div>
+        </div>  --!>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>TechFit Academia &copy; 2024 - Transforme seu corpo, transforme sua vida</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
