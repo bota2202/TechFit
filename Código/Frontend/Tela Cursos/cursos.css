@@ -1,0 +1,321 @@
+.cursos-header {
+    background: linear-gradient(135deg, var(--preto-escuro) 0%, var(--preto) 100%);
+    padding-top: 100px;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+}
+
+.header-features {
+    margin-top: 30px;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.feature i {
+    color: var(--verde-principal);
+    font-size: 1.1rem;
+}
+
+.feature span {
+    color: var(--prata);
+    font-size: 1.1rem;
+}
+
+.hero-image {
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    padding: 60px 40px;
+    text-align: center;
+    border: 2px solid rgba(26,188,156,0.3);
+}
+
+.hero-image i {
+    font-size: 4rem;
+    color: var(--verde-principal);
+    margin-bottom: 20px;
+}
+
+.hero-image p {
+    color: var(--prata);
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.filtros-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filtro-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--prata);
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.filtro-btn:hover,
+.filtro-btn.active {
+    background: var(--gradient-verde);
+    color: var(--branco);
+    border-color: var(--verde-principal);
+}
+
+.curso-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    height: 100%;
+}
+
+.curso-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--verde-principal);
+    box-shadow: 0 15px 30px rgba(26,188,156,0.2);
+}
+
+.curso-imagem {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    background: var(--preto-escuro);
+}
+
+.curso-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.curso-card:hover .curso-imagem img {
+    transform: scale(1.1);
+}
+
+.curso-categoria {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(0,0,0,0.8);
+    color: var(--branco);
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.curso-content {
+    padding: 25px;
+}
+
+.curso-content h3 {
+    color: var(--branco);
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.curso-descricao {
+    color: var(--prata);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.curso-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.info-item {
+    text-align: center;
+    flex: 1;
+}
+
+.info-item i {
+    color: var(--verde-principal);
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.info-item span {
+    color: var(--prata);
+    font-size: 0.8rem;
+    display: block;
+}
+
+.curso-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-curso {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-inscrever {
+    background: var(--gradient-verde);
+    color: var(--branco);
+}
+
+.btn-inscrever:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(26,188,156,0.3);
+}
+
+.btn-detalhes {
+    background: transparent;
+    color: var(--prata);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.btn-detalhes:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--branco);
+}
+
+.destaque-card {
+    background: rgba(255,255,255,0.05);
+    padding: 40px 20px;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+.destaque-card:hover {
+    transform: translateY(-5px);
+}
+
+.destaque-card i {
+    font-size: 2.5rem;
+    color: var(--verde-principal);
+    margin-bottom: 20px;
+}
+
+.destaque-card h4 {
+    color: var(--branco);
+    margin-bottom: 15px;
+}
+
+.destaque-card p {
+    color: var(--prata);
+    margin: 0;
+}
+
+.faq-cursos {
+    background: var(--preto-escuro);
+}
+
+.accordion-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.accordion-button {
+    background: rgba(255,255,255,0.05);
+    color: var(--branco);
+    font-weight: 600;
+    padding: 20px;
+}
+
+.accordion-button:not(.collapsed) {
+    background: rgba(26,188,156,0.1);
+    color: var(--verde-principal);
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: var(--verde-principal);
+}
+
+.accordion-body {
+    background: rgba(255,255,255,0.02);
+    color: var(--prata);
+    padding: 20px;
+}
+
+.curso-imagem-fallback {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.9);
+    text-align: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.curso-imagem-fallback i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .cursos-header {
+        padding-top: 120px;
+        text-align: center;
+    }
+    
+    .filtros-buttons {
+        justify-content: center;
+    }
+    
+    .filtro-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .curso-actions {
+        flex-direction: column;
+    }
+    
+    .hero-image {
+        padding: 40px 20px;
+        margin-top: 30px;
+    }
+    
+    .hero-image i {
+        font-size: 3rem;
+    }
+}
+
+.curso-card {
+    animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
