@@ -1,5 +1,10 @@
-// Dados dos cursos
-const cursos = [
+// Preferir dados do admin (localStorage), com fallback para a lista padrão abaixo
+const ADMIN_STORAGE_KEY_CURSOS = 'techfit_cursos';
+let cursos = JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY_CURSOS) || 'null');
+if (!Array.isArray(cursos) || cursos.length === 0) {
+// Dados dos cursos (default)
+// Expondo defaults globalmente para o painel admin poder semear
+const cursosDefault = [
     {
         id: 1,
         nome: "Musculação",
@@ -100,6 +105,11 @@ const cursos = [
         instrutor: "Juliana Mendes"
     }
 ];
+coursesEnd:
+// evita rótulos no bundle, apenas marca global para o admin
+try { window.cursosDefault = cursosDefault; } catch (_) {}
+cursos = cursosDefault;
+}
 
 // Categorias e cores
 const categorias = {

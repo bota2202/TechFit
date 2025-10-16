@@ -1,0 +1,163 @@
+:root {
+  /* Paleta moderna */
+  --bg-1000: #090b0f;      /* fundo página */
+  --bg-900: #0d1218;       /* navbar */
+  --bg-800: #111823;       /* cards/tabelas */
+  --bg-700: #15202c;       /* inputs */
+  --ink: #e8f1ff;          /* texto */
+  --ink-muted: #9bb0c9;    /* texto secundário */
+  --primary: #7ee787;      /* verde destaque */
+  --primary-700: #4cc36d;
+  --primary-500: #a9f1ad;
+  --accent: #58a6ff;       /* azul foco */
+  --danger: #ff6b81;
+  --soft-ring: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+body {
+  background:
+    radial-gradient(1000px 600px at 10% -10%, rgba(88, 166, 255, 0.06), transparent),
+    radial-gradient(800px 500px at 90% -10%, rgba(126, 231, 135, 0.06), transparent),
+    var(--bg-1000);
+  color: var(--ink);
+}
+
+.card {
+  background: linear-gradient(180deg, var(--bg-800), var(--bg-700));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--soft-ring);
+  border-radius: 14px;
+}
+
+.table-responsive {
+  border-radius: 12px;
+  box-shadow: var(--soft-ring);
+}
+
+.navbar {
+  background: linear-gradient(135deg, var(--bg-900), var(--bg-800));
+  box-shadow: var(--soft-ring);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.log-accordion-item .accordion-button {
+  background: linear-gradient(180deg, var(--bg-800), var(--bg-900));
+  color: var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.log-accordion-item .accordion-button:not(.collapsed) {
+  box-shadow: inset 0 -2px 0 0 var(--primary);
+}
+.accordion-button:focus {
+  box-shadow: 0 0 0 .2rem rgba(88, 166, 255, .25);
+}
+
+.nav-tabs {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.nav-tabs .nav-link {
+  color: var(--ink-muted);
+  background: linear-gradient(180deg, var(--bg-800), var(--bg-900));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom-color: transparent;
+  transition: all .2s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  color: var(--ink);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--ink);
+  background: linear-gradient(180deg, rgba(126, 231, 135, 0.12), var(--bg-800));
+  border-color: rgba(126, 231, 135, 0.3) rgba(255, 255, 255, 0.06) var(--bg-800);
+  box-shadow: inset 0 -2px 0 0 var(--primary);
+}
+
+.table-dark {
+  --bs-table-bg: var(--bg-800);
+  --bs-table-striped-bg: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--soft-ring);
+}
+
+.table-dark th {
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--primary-700), var(--primary));
+  border: none;
+  color: #08150d;
+  box-shadow: 0 8px 24px rgba(124, 221, 140, 0.25);
+}
+
+.btn-success:hover {
+  filter: brightness(1.05);
+}
+
+.btn-outline-danger {
+  border-color: rgba(255, 107, 129, 0.6);
+  color: #ffd6dc;
+}
+.btn-outline-light {
+  border-color: rgba(255,255,255,0.4);
+  color: var(--ink);
+}
+.btn-outline-light:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.btn-outline-danger:hover {
+  background: rgba(255, 107, 129, 0.1);
+  border-color: #ff6b81;
+  color: #ffe6ea;
+}
+
+.placeholder-box {
+  background: linear-gradient(180deg, var(--bg-800), var(--bg-700));
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 40px;
+  text-align: center;
+  color: var(--ink-muted);
+  box-shadow: var(--soft-ring);
+}
+
+.placeholder-box i {
+  font-size: 40px;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.modal-content {
+  background: linear-gradient(180deg, var(--bg-800), var(--bg-700));
+  color: var(--ink);
+  box-shadow: var(--soft-ring);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.form-control, .form-select {
+  background: var(--bg-700);
+  border-color: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 0.2rem rgba(88, 166, 255, 0.25);
+}
+
+/* action buttons in tables */
+table .btn {
+  border-radius: 8px;
+}
+
+/* subtle row hover */
+.table-dark tbody tr:hover {
+  background: rgba(88, 166, 255, 0.06);
+}
+

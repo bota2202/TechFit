@@ -1,4 +1,9 @@
-const unidades = [
+// Preferir dados do admin (localStorage), com fallback para a lista padrão abaixo
+const ADMIN_STORAGE_KEY_UNIDADES = 'techfit_unidades';
+let unidades = JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY_UNIDADES) || 'null');
+if (!Array.isArray(unidades) || unidades.length === 0) {
+// Expondo defaults globalmente para o painel admin poder semear
+const unidadesDefault = [
     {
         id: 1,
         cidade: "Limeira",
@@ -165,6 +170,9 @@ const unidades = [
         imagem: "../Imagens/barueri.jpg"
     }
 ];
+unidades = unidadesDefault;
+try { window.unidadesDefault = unidadesDefault; } catch (_) {}
+}
 
 // Sistema de fallback para imagens que não carregarem
 const gradientBackgrounds = [
