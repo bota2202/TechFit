@@ -14,16 +14,37 @@
     />
     <style>
       :root {
-        --primary: #2a9d8f;
-        --primary-dark: #21867a;
-        --secondary: #89f2e6;
-        --dark: #264653;
-        --light: #f8f9fa;
+        --verde-principal: #1abc9c;
+        --verde-escuro: #145a32;
+        --verde-claro: #2ecc71;
+        --preto: #0a0a0a;
+        --preto-escuro: #111;
+        --cinza: #7f8c8d;
+        --prata: #bdc3c7;
+        --laranja: #e67e22;
+        --branco: #ffffff;
+        --gradient-verde: linear-gradient(
+          135deg,
+          var(--verde-principal),
+          var(--verde-claro)
+        );
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
       }
 
       body {
-        background: linear-gradient(135deg, var(--dark) 0%, #1a3341 100%);
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--preto);
+        color: var(--branco);
+        overflow-x: hidden;
         height: 100vh;
         display: flex;
         align-items: center;
@@ -33,12 +54,13 @@
       }
 
       .login-box {
-        background-color: white;
+        background-color: var(--preto-escuro);
         border-radius: 15px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         padding: 30px;
         width: 100%;
         max-width: 400px;
+        border: 1px solid #333;
       }
 
       .logo {
@@ -48,30 +70,41 @@
 
       .logo h1 {
         font-weight: 800;
-        color: var(--dark);
+        color: var(--branco);
         font-size: 36px;
       }
 
       .logo span {
-        color: var(--primary);
+        background: var(--gradient-verde);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
       }
 
       .form-control {
         margin-bottom: 15px;
         padding: 12px 15px;
         border-radius: 8px;
-        border: 1px solid #ddd;
+        border: 1px solid #333;
         transition: all 0.3s;
+        background-color: var(--preto);
+        color: var(--branco);
       }
 
       .form-control:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 0.2rem rgba(42, 157, 143, 0.25);
+        border-color: var(--verde-principal);
+        box-shadow: 0 0 0 0.2rem rgba(26, 188, 156, 0.25);
+        background-color: var(--preto);
+        color: var(--branco);
+      }
+
+      .form-control::placeholder {
+        color: var(--prata);
       }
 
       .btn-login {
-        background-color: var(--primary);
-        color: white;
+        background: var(--gradient-verde);
+        color: var(--branco);
         width: 100%;
         padding: 12px;
         border: none;
@@ -82,8 +115,8 @@
       }
 
       .btn-login:hover {
-        background-color: var(--primary-dark);
         transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(26, 188, 156, 0.3);
       }
 
       .options {
@@ -94,24 +127,24 @@
       }
 
       .options a {
-        color: #6c757d;
+        color: var(--prata);
         text-decoration: none;
         transition: color 0.3s;
       }
 
       .options a:hover {
-        color: var(--primary);
+        color: var(--verde-principal);
       }
 
       .register {
         text-align: center;
         margin-top: 25px;
         font-size: 14px;
-        color: #6c757d;
+        color: var(--prata);
       }
 
       .register a {
-        color: var(--primary);
+        color: var(--verde-principal);
         text-decoration: none;
         font-weight: 600;
       }
@@ -122,14 +155,14 @@
 
       .fitness-icon {
         font-size: 50px;
-        color: var(--primary);
+        color: var(--verde-principal);
         margin-bottom: 10px;
       }
 
       .welcome {
         text-align: center;
         margin-bottom: 20px;
-        color: var(--dark);
+        color: var(--branco);
       }
 
       .welcome h3 {
@@ -138,7 +171,7 @@
       }
 
       .welcome p {
-        color: #6c757d;
+        color: var(--prata);
       }
     </style>
   </head>
