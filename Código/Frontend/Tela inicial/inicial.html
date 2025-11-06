@@ -1,264 +1,93 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TechFit Academia - Transforme Seu Corpo</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="main.css" />
-  </head>
-  <body>
-    <div class="menu-mobile-overlay" id="menuOverlay"></div>
-    <nav class="menu-mobile" id="mobileMenu">
-      <div class="menu-header">
-        <h3>TechFit</h3>
-        <button class="menu-close" id="closeMenu">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="menu-links">
-        <a href="inicial.tml" class="menu-link active">
-          <i class="fas fa-home"></i> Home
-        </a>
-        <a href="../Tela unidades/unidades.html" class="menu-link">
-          <i class="fas fa-map-marker-alt"></i> Unidades
-        </a>
-        <a href="../Tela Cursos/cursos.html" class="menu-link">
-          <i class="fas fa-dumbbell"></i> Cursos
-        </a>
-        <a href="#planos" class="menu-link">
-          <i class="fas fa-tag"></i> Planos
-        </a>
-        <a href="#contato" class="menu-link">
-          <i class="fas fa-phone"></i> Contato
-        </a>
-      </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechFit - Tela Inicial</title>
+    <link rel="stylesheet" href="inicial.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <section class="nav-esquerda">
+            <p class="logo_techfit">TechFit</p>
+        </section>
+
+        <section class="nav-centro">
+            <a class="btn-nav-centro btn-ativo" href="inicial.html#hero">Início</a>
+            <a class="btn-nav-centro" href="../Tela planos/planos.html">Planos</a>
+            <a class="btn-nav-centro" href="../Tela unidades/unidades.html">Unidades</a>
+            <a class="btn-nav-centro" href="../Tela cursos/cursos.html">Cursos</a>
+        </section>
+
+        <section class="nav-direita">
+            <a class="btn-nav-direita btn-login" href="../PageLogin/telalogin.html">Entrar</a>
+            <a class="btn-nav-direita btn-sign" href="../Tela cadastro/cadastro.html">Cadastrar-se</a>
+        </section>
     </nav>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container">
-        <button class="navbar-toggler me-3" type="button" id="openMenu">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand fw-bold fs-3" href="#">TechFit</a>
-
-        <div class="navbar-desktop d-none d-lg-flex">
-          <a href="index.html" class="nav-link active">Home</a>
-          <a href="../Tela unidades/unidades.html" class="nav-link">Unidades</a>
-          <a href="../Tela Cursos/cursos.html" class="nav-link">Cursos</a>
-          <a href="#planos" class="nav-link">Planos</a>
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <h1>Transforme seu corpo e mente</h1>
+            <p>A tecnologia encontra o fitness para resultados extraordinários</p>
+            <a class="hero-cta" href="inicial.html#comecar-agora">Comece agora</a>
         </div>
-
-        <div class="d-flex">
-          <a href="../PageLogin/telalogin.html" class="btn btn-outline-light me-2">
-            <i class="fa-solid fa-right-to-bracket"></i> Login
-          </a>
-          <a href="#" class="btn btn-green">
-            <i class="fa-solid fa-user-plus"></i> Cadastro
-          </a>
-        </div>
-      </div>
-    </nav>
-
-    <header class="hero d-flex align-items-center text-center text-white">
-      <div class="hero-video">
-        <video autoplay muted loop playsinline>
-          <source src="assets/videos/hero-bg.mp4" type="video/mp4" />
-        </video>
-        <div class="hero-overlay"></div>
-      </div>
-      <div class="container position-relative">
-        <h1 class="display-3 fw-bold hero-title">
-          <span class="text-green">Transforme</span> seu corpo
-        </h1>
-        <p class="lead hero-subtitle">
-          Tecnologia e fitness em uma experiência única
-        </p>
-        <div class="hero-buttons mt-4">
-          <a href="../Tela unidades/unidades.html" class="btn btn-green btn-lg me-3">
-            <i class="fas fa-map-marker-alt"></i> Encontrar Unidade
-          </a>
-          <a href="../Tela Cursos/cursos.html" class="btn btn-outline-light btn-lg">
-            <i class="fas fa-dumbbell"></i> Ver Cursos
-          </a>
-        </div>
-      </div>
-    </header>
-
-    <section class="stats-section py-5">
-      <div class="container">
-        <div class="row text-center">
-          <div class="col-md-3 col-6">
-            <div class="stat-item">
-              <h3 class="stat-number" data-count="15">0</h3>
-              <p class="stat-label">Unidades</p>
-            </div>
-          </div>
-          <div class="col-md-3 col-6">
-            <div class="stat-item">
-              <h3 class="stat-number" data-count="50">0</h3>
-              <p class="stat-label">Instrutores</p>
-            </div>
-          </div>
-          <div class="col-md-3 col-6">
-            <div class="stat-item">
-              <h3 class="stat-number" data-count="10000">0</h3>
-              <p class="stat-label">Alunos</p>
-            </div>
-          </div>
-          <div class="col-md-3 col-6">
-            <div class="stat-item">
-              <h3 class="stat-number" data-count="9">0</h3>
-              <p class="stat-label">Cursos</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 
-    <section class="highlights py-5 bg-dark">
-      <div class="container">
-        <div class="row g-4">
-          <div class="col-md-4">
-            <div class="highlight-card text-center">
-              <i class="fas fa-bolt"></i>
-              <h4>Equipamentos Tech</h4>
-              <p>Aparelhos de última geração com tecnologia IoT</p>
+    <section class="content-section" id="comecar-agora">
+        <h2>Por que escolher TechFit?</h2>
+        <p>Oferecemos uma experiência única que combina tecnologia de ponta com metodologias comprovadas de treinamento para ajudá-lo a alcançar seus objetivos de forma eficiente e sustentável.</p>
+        
+        <div class="cards-container" id="cards-container">
+            <div class="card">
+                <div class="card-icon">💪</div>
+                <h3>Diferentes cursos</h3>
+                <p>Independentemente de seus gostos ou habilidades, temos cursos para todos.</p>
+                <a href="../Tela cursos/cursos.html" class="btn-geral">Ver cursos</a>
             </div>
-          </div>
-          <div class="col-md-4">
-            <div class="highlight-card text-center">
-              <i class="fas fa-heart"></i>
-              <h4>Acompanhamento</h4>
-              <p>Personal trainers e nutricionistas especializados</p>
+            
+            <div class="card">
+                <div class="card-icon">🏠</div>
+                <h3>Sempre perto</h3>
+                <p>Várias unidades espalhadas pelo Brasil, para que você possa ir onde quer que esteja.</p>
+                <a class="btn-geral" href="../Tela unidades/unidades.html">Ver unidades</a>
             </div>
-          </div>
-          <div class="col-md-4">
-            <div class="highlight-card text-center">
-              <i class="fas fa-mobile-alt"></i>
-              <h4>App Exclusivo</h4>
-              <p>Controle seus treinos e evolução pelo celular</p>
+            
+            <div class="card">
+                <div class="card-icon">💲</div>
+                <h3>Cabe no seu bolso</h3>
+                <p>Temos diferentes planos que se adaptam a você e ao seu bolso, sempre pensando no seu bem-estar.</p>
+                <a href="../Tela planos/planos.html" class="btn-geral">Ver planos</a>
             </div>
-          </div>
         </div>
-      </div>
     </section>
 
-    <section id="planos" class="planos py-5">
-      <div class="container">
-        <h2 class="text-center mb-5 fw-bold">Planos que Cabem no Seu Bolso</h2>
-        <div class="row g-4 justify-content-center">
-          <div class="col-lg-3 col-md-6">
-            <div class="plano-card">
-              <div class="plano-header">
-                <h3>Básico</h3>
-                <div class="preco">R$ <span>99</span>/mês</div>
-              </div>
-              <ul class="plano-beneficios">
-                <li><i class="fas fa-check"></i> 1 unidade</li>
-                <li><i class="fas fa-check"></i> Musculação</li>
-                <li><i class="fas fa-check"></i> App TechFit</li>
-                <li><i class="fas fa-times"></i> Aulas Coletivas</li>
-                <li><i class="fas fa-times"></i> Personal Trainer</li>
-              </ul>
-              <button class="btn btn-plano">Começar Agora</button>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo-section">
+                <p class="footer-logo">TechFit</p>
+                <p class="footer-tagline">Transformando vidas através da tecnologia e fitness</p>
             </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="plano-card popular">
-              <div class="plano-badge">MAIS POPULAR</div>
-              <div class="plano-header">
-                <h3>Intermediário</h3>
-                <div class="preco">R$ <span>149</span>/mês</div>
-              </div>
-              <ul class="plano-beneficios">
-                <li><i class="fas fa-check"></i> Todas unidades</li>
-                <li><i class="fas fa-check"></i> Musculação</li>
-                <li><i class="fas fa-check"></i> 4 aulas coletivas/mês</li>
-                <li><i class="fas fa-check"></i> App TechFit</li>
-                <li><i class="fas fa-times"></i> Personal Trainer</li>
-              </ul>
-              <button class="btn btn-plano">Começar Agora</button>
+            
+            <div class="footer-social">
+                <a href="https://www.instagram.com/techfit.brasil/" target="_blank" rel="noopener noreferrer" class="footer-instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                    <span>@techfit.brasil</span>
+                </a>
+                <a href="https://wa.me/5519999495895" target="_blank" rel="noopener noreferrer" class="footer-whatsapp">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>(19) 99949-5895</span>
+                </a>
             </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="plano-card">
-              <div class="plano-header">
-                <h3>Premium</h3>
-                <div class="preco">R$ <span>199</span>/mês</div>
-              </div>
-              <ul class="plano-beneficios">
-                <li><i class="fas fa-check"></i> Todas unidades</li>
-                <li><i class="fas fa-check"></i> Todos os cursos</li>
-                <li><i class="fas fa-check"></i> Aulas ilimitadas</li>
-                <li><i class="fas fa-check"></i> App TechFit Pro</li>
-                <li><i class="fas fa-check"></i> 2 sessões personal/mês</li>
-              </ul>
-              <button class="btn btn-plano">Começar Agora</button>
-            </div>
-          </div>
         </div>
-      </div>
-    </section>
-
-    <footer class="bg-darker text-white py-5">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-4 mb-4">
-            <h4>TechFit</h4>
-            <p>Transformando vidas através da tecnologia.</p>
-            <div class="social-links">
-              <a href="#"><i class="fab fa-facebook"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-whatsapp"></i></a>
-              <a href="#"><i class="fab fa-tiktok"></i></a>
-            </div>
-          </div>
-          <div class="col-lg-2 col-6 mb-4">
-            <h5>Links</h5>
-            <ul class="list-unstyled">
-              <li><a href="inicial.html">Home</a></li>
-              <li><a href="../Tela unidades/unidades.html">Unidades</a></li>
-              <li><a href="../Tela Cursos/cursos.html">Cursos</a></li>
-              <li><a href="#planos">Planos</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-3 col-6 mb-4">
-            <h5>Contato</h5>
-            <ul class="list-unstyled">
-              <li><i class="fas fa-phone"></i> (19) 9999-9999</li>
-              <li><i class="fas fa-envelope"></i> contato@techfit.com</li>
-              <li><i class="fas fa-map-marker-alt"></i> Limeira, SP</li>
-            </ul>
-          </div>
-          <div class="col-lg-3 mb-4">
-            <h5>Newsletter</h5>
-            <p>Receba dicas e promoções exclusivas</p>
-            <div class="input-group">
-              <input
-                type="email"
-                class="form-control"
-                placeholder="Seu email"
-              />
-              <button class="btn btn-green">Inscrever</button>
-            </div>
-          </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 TechFit. Todos os direitos reservados.</p>
         </div>
-        <hr />
-        <div class="text-center pt-3">
-          <p>&copy; 2025 TechFit Academia. Todos os direitos reservados.</p>
-        </div>
-      </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="main.js"></script>
-  </body>
+</body>
 </html>
