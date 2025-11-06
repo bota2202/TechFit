@@ -1,9 +1,6 @@
-// Preferir dados do admin (localStorage), com fallback para a lista padrão abaixo
 const ADMIN_STORAGE_KEY_CURSOS = 'techfit_cursos';
 let cursos = JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY_CURSOS) || 'null');
 if (!Array.isArray(cursos) || cursos.length === 0) {
-// Dados dos cursos (default)
-// Expondo defaults globalmente para o painel admin poder semear
 const cursosDefault = [
     {
         id: 1,
@@ -106,12 +103,10 @@ const cursosDefault = [
     }
 ];
 coursesEnd:
-// evita rótulos no bundle, apenas marca global para o admin
 try { window.cursosDefault = cursosDefault; } catch (_) {}
 cursos = cursosDefault;
 }
 
-// Categorias e cores
 const categorias = {
     'forca': { nome: 'Força', cor: '#e74c3c' },
     'cardio': { nome: 'Cardio', cor: '#3498db' },
@@ -119,7 +114,6 @@ const categorias = {
     'mente-corpo': { nome: 'Mente & Corpo', cor: '#9b59b6' }
 };
 
-// Gradientes de fallback
 const gradientBackgrounds = [
     'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
@@ -129,7 +123,6 @@ const gradientBackgrounds = [
     'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'
 ];
 
-// Função para gerar imagem do curso com fallback
 function generateCursoImage(curso, index) {
     const gradient = gradientBackgrounds[index % gradientBackgrounds.length];
     const categoria = categorias[curso.categoria];
@@ -145,7 +138,6 @@ function generateCursoImage(curso, index) {
     `;
 }
 
-// Fallback para imagens de cursos
 function fallbackCursoImage(nome, index) {
     const gradient = gradientBackgrounds[index % gradientBackgrounds.length];
     const icons = ['fas fa-dumbbell', 'fas fa-spa', 'fas fa-running', 'fas fa-fire', 'fas fa-heartbeat', 'fas fa-music'];
@@ -159,7 +151,6 @@ function fallbackCursoImage(nome, index) {
     `;
 }
 
-// Função para renderizar cursos
 function renderCursos(cursosToRender = cursos) {
     const grid = document.getElementById('cursosGrid');
     grid.innerHTML = '';
@@ -215,7 +206,6 @@ function renderCursos(cursosToRender = cursos) {
     });
 }
 
-// Função para mostrar detalhes do curso
 function showCursoDetails(cursoId) {
     const curso = cursos.find(c => c.id === cursoId);
     if (!curso) return;
@@ -275,7 +265,6 @@ function showCursoDetails(cursoId) {
     modal.show();
 }
 
-// Função para inscrição no curso
 function inscreverCurso(cursoId) {
     const curso = cursos.find(c => c.id === cursoId);
     if (!curso) return;
@@ -283,15 +272,12 @@ function inscreverCurso(cursoId) {
     alert(`Inscrição no curso ${curso.nome} realizada com sucesso!\n\nEm breve nossa equipe entrará em contato.`);
 }
 
-// Filtros de categoria
 function setupFilters() {
     const filterButtons = document.querySelectorAll('.filtro-btn');
     
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
-            // Remove active de todos os botões
             filterButtons.forEach(btn => btn.classList.remove('active'));
-            // Adiciona active no botão clicado
             this.classList.add('active');
             
             const categoria = this.getAttribute('data-categoria');
@@ -306,7 +292,6 @@ function setupFilters() {
     });
 }
 
-// Inicialização
 document.addEventListener('DOMContentLoaded', function() {
     renderCursos();
     setupFilters();

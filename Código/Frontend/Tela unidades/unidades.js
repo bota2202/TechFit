@@ -1,8 +1,6 @@
-// Preferir dados do admin (localStorage), com fallback para a lista padrão abaixo
 const ADMIN_STORAGE_KEY_UNIDADES = 'techfit_unidades';
 let unidades = JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY_UNIDADES) || 'null');
 if (!Array.isArray(unidades) || unidades.length === 0) {
-// Expondo defaults globalmente para o painel admin poder semear
 const unidadesDefault = [
     {
         id: 1,
@@ -174,7 +172,6 @@ unidades = unidadesDefault;
 try { window.unidadesDefault = unidadesDefault; } catch (_) {}
 }
 
-// Sistema de fallback para imagens que não carregarem
 const gradientBackgrounds = [
     'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
@@ -183,7 +180,6 @@ const gradientBackgrounds = [
     'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
 ];
 
-// Função para gerar imagem da unidade COM FALLBACK
 function generateUnidadeImage(unidade, index) {
     const gradient = gradientBackgrounds[index % gradientBackgrounds.length];
     
@@ -196,7 +192,6 @@ function generateUnidadeImage(unidade, index) {
     `;
 }
 
-// Fallback quando imagem não carrega
 function fallbackImage(cidade, index) {
     const gradient = gradientBackgrounds[index % gradientBackgrounds.length];
     const icons = ['fas fa-dumbbell', 'fas fa-running', 'fas fa-weight-hanging', 'fas fa-fire', 'fas fa-heartbeat'];
@@ -210,7 +205,6 @@ function fallbackImage(cidade, index) {
     `;
 }
 
-// Função para renderizar unidades
 function renderUnidades(unidadesToRender = unidades) {
     const grid = document.getElementById('unidadesGrid');
     grid.innerHTML = '';
@@ -268,7 +262,6 @@ function renderUnidades(unidadesToRender = unidades) {
     });
 }
 
-// Resto do código permanece igual...
 function showUnidadeDetails(unidadeId) {
     const unidade = unidades.find(u => u.id === unidadeId);
     if (!unidade) return;
