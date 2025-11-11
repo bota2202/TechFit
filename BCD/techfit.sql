@@ -3,6 +3,7 @@ USE TechFit;
 
 CREATE TABLE Usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    email_usuario VARCHAR(255) NOT NULL UNIQUE;
     senha_usuario_hash VARCHAR(255) NOT NULL,
     nome_usuario VARCHAR(255) NOT NULL,
     telefone_usuario VARCHAR(14) NOT NULL,
@@ -131,16 +132,16 @@ VALUES
 (149.00, 'Todas unidades, Musculação, 4 aulas coletivas/mês, App TechFit, sem Personal Trainer'),
 (199.00, 'Todas unidades, Todos os cursos, Aulas ilimitadas, App TechFit Pro, 2 sessões personal/mês');
 
-INSERT INTO Usuarios (nome_usuario, senha_usuario_hash, telefone_usuario, cpf_usuario, tipo_usuario, endereco_usuario)
+INSERT INTO Usuarios (nome_usuario, email_usuario, senha_usuario_hash, telefone_usuario, cpf_usuario, tipo_usuario, endereco_usuario)
 VALUES
-('ADMIN', 'hash123', '(19)11111-1111', '111.111.111-11', 0, 'Rua João Gomes de Pinho, 83, Limeira'),
-('Gabriel Ramos', 'hash234', '(19)22222-2222', '222.222.222-22', 1, 'Chácara, 150, Limeira'),
-('Daniel Charlo', 'hash345', '(19)33333-3333', '333.333.333-33', 2, 'Luz do Sol, 200, Campinas'),
-('Gabriel Xavier', 'hash456', '(19)44444-4444', '444.444.444-44', 3, 'Rodinha, 50, Piracicaba'),
-('Eduardo Rocha', 'hash567', '(19)55555-5555', '555.555.555-55', 3, 'Rave, 80, Sorocaba'),
-('Artur Maia', 'hash678', '(19)66666-6666', '666.666.666-66', 3, 'Paulínia, 120, Ribeirão Preto'),
-('Douglas Júnior', 'hash789', '(19)77777-7777', '777.777.777-77', 3, 'Condomínio, 25, Araraquara'),
-('Murilo Coletta', 'hash890', '(19)88888-8888', '888.888.888-88', 3, 'Cordeiro, 300, São Carlos');
+('ADMIN', 'otaviosaturnino22@gmail.com', 'hash123', '(19)11111-1111', '111.111.111-11', 0, 'Rua João Gomes de Pinho, 83, Limeira'),
+('Gabriel Ramos', 'otaviosaturnino22@gmail.com',  'hash234', '(19)22222-2222', '222.222.222-22', 1, 'Chácara, 150, Limeira'),
+('Daniel Charlo', 'otaviosaturnino22@gmail.com',  'hash345', '(19)33333-3333', '333.333.333-33', 2, 'Luz do Sol, 200, Campinas'),
+('Gabriel Xavier', 'otaviosaturnino22@gmail.com',  'hash456', '(19)44444-4444', '444.444.444-44', 3, 'Rodinha, 50, Piracicaba'),
+('Eduardo Rocha', 'otaviosaturnino22@gmail.com',  'hash567', '(19)55555-5555', '555.555.555-55', 3, 'Rave, 80, Sorocaba'),
+('Artur Maia', 'otaviosaturnino22@gmail.com',  'hash678', '(19)66666-6666', '666.666.666-66', 3, 'Paulínia, 120, Ribeirão Preto'),
+('Douglas Júnior', 'otaviosaturnino22@gmail.com',  'hash789', '(19)77777-7777', '777.777.777-77', 3, 'Condomínio, 25, Araraquara'),
+('Murilo Coletta', 'otaviosaturnino22@gmail.com',  'hash890', '(19)88888-8888', '888.888.888-88', 3, 'Cordeiro, 300, São Carlos');
 
 INSERT INTO Turmas (id_curso, responsavel_turma, nome_turma, data_inicio, data_fim, horario_turma)
 VALUES
