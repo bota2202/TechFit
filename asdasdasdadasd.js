@@ -1,22 +1,17 @@
-// Variáveis globais
 let currentStep = 1;
 const totalSteps = 3;
 
-// Inicialização quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', function() {
     initializeForm();
     setupEventListeners();
 });
 
-// Inicializa o formulário
 function initializeForm() {
     updateProgressBar();
     updateStepIndicators();
 }
 
-// Configura os event listeners
 function setupEventListeners() {
-    // Botões de navegação
     document.querySelectorAll('.btn-next').forEach(button => {
         button.addEventListener('click', handleNextStep);
     });
@@ -25,18 +20,14 @@ function setupEventListeners() {
         button.addEventListener('click', handlePrevStep);
     });
     
-    // Formatação de CPF e telefone
     document.getElementById('cpf-sign').addEventListener('input', formatCPF);
     document.getElementById('telefone-sign').addEventListener('input', formatPhone);
     
-    // Carregamento de cidades
     document.getElementById('estado-sign').addEventListener('change', handleStateChange);
     
-    // Validação do formulário
     document.querySelector('.form-sign').addEventListener('submit', validateForm);
 }
 
-// Avança para a próxima etapa
 function handleNextStep(e) {
     const nextStep = parseInt(e.target.getAttribute('data-next'));
     
@@ -45,29 +36,19 @@ function handleNextStep(e) {
     }
 }
 
-// Volta para a etapa anterior
 function handlePrevStep(e) {
     const prevStep = parseInt(e.target.getAttribute('data-prev'));
     changeStep(prevStep);
 }
 
-// Altera a etapa atual
 function changeStep(step) {
-    // Esconde a etapa atual
     document.querySelector(`.form-step.active`).classList.remove('active');
-    
-    // Mostra a nova etapa
     document.querySelector(`#${getStepId(step)}`).classList.add('active');
-    
-    // Atualiza a etapa atual
     currentStep = step;
-    
-    // Atualiza a barra de progresso e indicadores
     updateProgressBar();
     updateStepIndicators();
 }
 
-// Retorna o ID da seção com base na etapa
 function getStepId(step) {
     switch(step) {
         case 1: return 'dadospessoais';
@@ -77,14 +58,12 @@ function getStepId(step) {
     }
 }
 
-// Atualiza a barra de progresso
 function updateProgressBar() {
     const progressFill = document.getElementById('progress-fill');
     const progressPercentage = (currentStep / totalSteps) * 100;
     progressFill.style.width = `${progressPercentage}%`;
 }
 
-// Atualiza os indicadores de etapa
 function updateStepIndicators() {
     document.querySelectorAll('.step').forEach(step => {
         const stepNumber = parseInt(step.getAttribute('data-step'));
@@ -97,7 +76,6 @@ function updateStepIndicators() {
     });
 }
 
-// Valida a etapa atual
 function validateCurrentStep() {
     const currentStepElement = document.querySelector('.form-step.active');
     const inputs = currentStepElement.querySelectorAll('input[required], select[required]');
@@ -110,7 +88,6 @@ function validateCurrentStep() {
         }
     }
     
-    // Validações específicas por etapa
     if (currentStep === 1) {
         if (!validateEmail(document.getElementById('email-sign').value)) {
             alert('Por favor, insira um e-mail válido.');
@@ -128,7 +105,6 @@ function validateCurrentStep() {
     return true;
 }
 
-// Valida o formulário completo no envio
 function validateForm(e) {
     if (!validateCurrentStep()) {
         e.preventDefault();
@@ -155,7 +131,6 @@ function validateForm(e) {
     return true;
 }
 
-// Formatação de CPF
 function formatCPF(e) {
     let value = e.target.value.replace(/\D/g, '');
     if (value.length <= 11) {
@@ -166,13 +141,11 @@ function formatCPF(e) {
     }
 }
 
-// Validação de CPF (simplificada)
 function validateCPF(cpf) {
     cpf = cpf.replace(/\D/g, '');
     return cpf.length === 11;
 }
 
-// Formatação de telefone
 function formatPhone(e) {
     let value = e.target.value.replace(/\D/g, '');
     if (value.length <= 11) {
@@ -182,18 +155,15 @@ function formatPhone(e) {
     }
 }
 
-// Validação de e-mail
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
 
-// Carregamento de cidades
 async function handleStateChange() {
     const uf = this.value;
     const cidadesSelect = document.getElementById('cidade-sign');
 
-    // Remove a opção inicial se existir
     const first = this.querySelector("option[value='']");
     if (first) first.remove();
 
@@ -222,7 +192,6 @@ async function handleStateChange() {
     }
 }
 
-// Remove a opção inicial quando uma cidade é selecionada
 document.getElementById('cidade-sign').addEventListener("change", function() {
     const first = this.querySelector("option[value='']");
     if (first && this.value !== '') first.remove();

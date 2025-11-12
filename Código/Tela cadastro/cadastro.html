@@ -14,8 +14,14 @@
         </div>
 
         <form action="cadastro.php" method="post" class="form-sign">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
             <main id="sign-fields">
-                <section id="dadospessoais" class="column-sign">
+                <section id="dadospessoais" class="form-step active">
                     <h2>Dados Pessoais</h2>
                     <label for="nome-sign">Nome Completo</label>
                     <input type="text" id="nome-sign" name="nome" class="campo-sign" placeholder="Digite seu nome completo" required />
@@ -28,9 +34,13 @@
                     
                     <label for="telefone-sign">Telefone</label>
                     <input type="tel" id="telefone-sign" name="telefone" class="campo-sign" placeholder="(00) 00000-0000" required />
+                    
+                    <div class="button-group">
+                        <button type="button" class="btn-next" data-next="2">Próximo</button>
+                    </div>
                 </section>
 
-                <section id="endereco" class="column-sign">
+                <section id="endereco" class="form-step">
                     <h2>Endereço</h2>
                     <label for="rua-sign">Rua</label>
                     <input type="text" id="rua-sign" name="rua" class="campo-sign" placeholder="Nome da rua" required />
@@ -74,23 +84,34 @@
                     <select name="cidade" id="cidade-sign" class="campo-sign" disabled required>
                         <option value="">Selecione um estado primeiro</option>
                     </select>
+                    
+                    <div class="button-group">
+                        <button type="button" class="btn-prev" data-prev="1">Voltar</button>
+                        <button type="button" class="btn-next" data-next="3">Próximo</button>
+                    </div>
                 </section>
 
-                <section id="senha" class="column-sign">
+                <section id="senha" class="form-step">
                     <h2>Segurança</h2>
                     <label for="senha-sign">Senha</label>
                     <input type="password" id="senha-sign" name="senha" class="campo-sign" placeholder="Crie uma senha forte" required />
                     
                     <label for="confirmar-sign">Confirmar Senha</label>
                     <input type="password" id="confirmar-sign" name="confirmar" class="campo-sign" placeholder="Repita sua senha" required />
+                    
+                    <div class="button-group">
+                        <button type="button" class="btn-prev" data-prev="2">Voltar</button>
+                        <button type="submit" class="submit">
+                            <span>Cadastrar</span>
+                        </button>
+                    </div>
                 </section>
             </main>
 
-            <button type="submit" class="submit">
-                <span>Cadastrar</span>
-            </button>
-            <a href="../PageLogin/telalogin.html">Já tem uma conta?</a>
-            <a href="../Tela inicial/inicial.html">Voltar para a tela inicial</a>
+            <div class="links">
+                <a href="../PageLogin/telalogin.html">Já tem uma conta?</a>
+                <a href="../Tela inicial/inicial.html">Voltar para a tela inicial</a>
+            </div>
         </form>
     </div>
 
