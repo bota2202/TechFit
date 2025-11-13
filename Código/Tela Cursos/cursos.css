@@ -1,0 +1,407 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    overflow-x: hidden;
+    background: #f5f5f5;
+}
+
+:root {
+    --gradiente_texto: linear-gradient(146deg,
+        rgba(255,255,255,1) 0%,
+        rgba(36,255,36,1) 50%,
+        rgba(0,199,0,1) 71%,
+        rgba(0,198,0,1) 84%,
+        rgba(0,128,0,1) 100%
+    );
+}
+
+main {
+    margin-top: 80px;
+}
+
+.cursos-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 40px;
+}
+
+.filtros {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 50px;
+}
+
+.filtro-btn {
+    padding: 12px 30px;
+    border: 2px solid #00c700;
+    background: white;
+    color: #00c700;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filtro-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,199,0,0.3);
+}
+
+.filtro-btn.ativo {
+    background: linear-gradient(90deg, #00c700, #008000);
+    color: white;
+    border-color: #00c700;
+}
+
+.cursos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.curso-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.curso-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,199,0,0.2);
+}
+
+.curso-imagem {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+.curso-content {
+    padding: 30px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.curso-tipo {
+    display: inline-block;
+    padding: 5px 15px;
+    background: rgba(0,199,0,0.1);
+    color: #008000;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    width: fit-content;
+}
+
+.curso-tipo.forca {
+    background: rgba(255, 87, 34, 0.1);
+    color: #ff5722;
+}
+
+.curso-tipo.cardio {
+    background: rgba(233, 30, 99, 0.1);
+    color: #e91e63;
+}
+
+.curso-tipo.mente-corpo {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+}
+
+.curso-tipo.lutas {
+    background: rgba(156, 39, 176, 0.1);
+    color: #9c27b0;
+}
+
+.curso-nome {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.curso-descricao {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+.curso-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.curso-preco {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #008000;
+}
+
+.curso-preco span {
+    font-size: 1rem;
+    color: #666;
+}
+
+.btn-ver-turmas {
+    padding: 10px 25px;
+    background: linear-gradient(90deg, #00c700, #008000);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn-ver-turmas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,199,0,0.4);
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal-container {
+    background: white;
+    border-radius: 20px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    padding: 30px;
+    border-bottom: 2px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-titulo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #008000;
+}
+
+.modal-fechar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: #666;
+}
+
+.modal-fechar:hover {
+    background: #e0e0e0;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.modal-mensagem {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.modal-mensagem i {
+    font-size: 3rem;
+    color: #00c700;
+    margin-bottom: 20px;
+}
+
+.modal-mensagem p {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+footer {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: white;
+    padding: 40px 40px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 60px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.footer-logo-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-logo {
+    background: var(--gradiente_texto);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.footer-tagline {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+}
+
+.footer-social {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.footer-social a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+}
+
+.footer-social a:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 199, 0, 0.3);
+}
+
+.footer-social i {
+    font-size: 1.3rem;
+}
+
+.footer-instagram:hover {
+    color: #E4405F;
+}
+
+.footer-whatsapp:hover {
+    color: #25D366;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #888;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .cursos-container {
+        padding: 40px 20px;
+    }
+
+    .filtros {
+        gap: 10px;
+    }
+
+    .filtro-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    .cursos-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-social {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .footer-social a {
+        width: 100%;
+        justify-content: center;
+    }
+}
+

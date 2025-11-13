@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="PT-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechFit - Unidades</title>
     <link rel="stylesheet" href="unidades.css">
-    <link rel="stylesheet" href="../Tela inicial/inicial.css">
+    <link rel="stylesheet" href="../nav.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     
@@ -27,6 +31,39 @@
         </section>
     </nav>
 
+    <main>
+        <div class="lista-unidades" id="lista-unidades">
+        </div>
+        
+        <div class="detalhes-unidade vazio" id="detalhes-unidade">
+        </div>
+    </main>
 
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo-section">
+                <p class="footer-logo">TechFit</p>
+                <p class="footer-tagline">Transformando vidas através da tecnologia e fitness</p>
+            </div>
+            
+            <div class="footer-social">
+                <a href="https://www.instagram.com/techfit.brasil/" target="_blank" rel="noopener noreferrer" class="footer-instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                    <span>@techfit.brasil</span>
+                </a>
+                <a href="https://wa.me/5519999495895" target="_blank" rel="noopener noreferrer" class="footer-whatsapp">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>(19) 99949-5895</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 TechFit. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../DB/atualizar_nav.js"></script>
+    <script src="unidades.js"></script>
 </body>
 </html>

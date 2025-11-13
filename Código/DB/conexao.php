@@ -8,9 +8,9 @@
     $conn = new mysqli($server,$user,$senha,$db);
 
     if($conn->connect_error){
-        echo "Erro";
-    }else{
-        echo "Sucesso";
+        die("Erro de conexão: " . $conn->connect_error);
     }
+
+    $conn->set_charset("utf8");
 
 ?>

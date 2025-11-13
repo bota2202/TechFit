@@ -1,0 +1,312 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+    min-height: 100vh;
+}
+
+:root {
+    --gradiente_texto: linear-gradient(146deg,
+        rgba(255,255,255,1) 0%,
+        rgba(36,255,36,1) 50%,
+        rgba(0,199,0,1) 71%,
+        rgba(0,198,0,1) 84%,
+        rgba(0,128,0,1) 100%
+    );
+}
+
+main {
+    margin-top: 80px;
+    padding: 60px 20px;
+}
+
+.planos-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.planos-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.planos-header h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    background: var(--gradiente_texto);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
+.planos-header p {
+    font-size: 1.3rem;
+    color: #555;
+}
+
+.planos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.plano-card {
+    background: white;
+    border-radius: 25px;
+    padding: 30px 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.plano-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0,199,0,0.2);
+}
+
+.plano-card.destaque {
+    border: 3px solid #00c700;
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #ffffff 0%, #f1f8f4 100%);
+}
+
+.plano-card.destaque::before {
+    content: "Mais Popular";
+    position: absolute;
+    top: -15px;
+    right: 30px;
+    background: linear-gradient(90deg, #00c700, #008000);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 5px 15px rgba(0,199,0,0.3);
+}
+
+.plano-nome {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.plano-preco {
+    margin-bottom: 30px;
+}
+
+.plano-preco-valor {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #008000;
+    line-height: 1;
+}
+
+.plano-preco-valor span {
+    font-size: 1.5rem;
+    color: #666;
+    font-weight: 400;
+}
+
+.plano-preco-periodo {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+.plano-beneficios {
+    flex: 1;
+    margin-bottom: 30px;
+}
+
+.plano-beneficios h3 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.beneficio-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: #555;
+}
+
+.beneficio-item i {
+    color: #00c700;
+    margin-top: 3px;
+    font-size: 1.1rem;
+}
+
+.btn-assinar {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(90deg, #00c700, #008000);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    box-shadow: 0 5px 20px rgba(0,199,0,0.3);
+}
+
+.btn-assinar:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,199,0,0.5);
+}
+
+.plano-card.destaque .btn-assinar {
+    background: linear-gradient(90deg, #008000, #006600);
+    box-shadow: 0 5px 20px rgba(0,199,0,0.4);
+}
+
+footer {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: white;
+    padding: 40px 40px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 60px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.footer-logo-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-logo {
+    background: var(--gradiente_texto);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.footer-tagline {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+}
+
+.footer-social {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.footer-social a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+}
+
+.footer-social a:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 199, 0, 0.3);
+}
+
+.footer-social i {
+    font-size: 1.3rem;
+}
+
+.footer-instagram:hover {
+    color: #E4405F;
+}
+
+.footer-whatsapp:hover {
+    color: #25D366;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #888;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .planos-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .planos-header p {
+        font-size: 1.1rem;
+    }
+
+    .planos-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .plano-card.destaque {
+        transform: scale(1);
+    }
+
+    .plano-preco-valor {
+        font-size: 2.5rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-social {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .footer-social a {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
