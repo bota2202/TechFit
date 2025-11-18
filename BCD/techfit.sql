@@ -3,13 +3,16 @@ USE TechFit;
 
 CREATE TABLE Usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
-    email_usuario VARCHAR(255) NOT NULL UNIQUE;
+    email_usuario VARCHAR(255) NOT NULL UNIQUE,
     senha_usuario_hash VARCHAR(255) NOT NULL,
     nome_usuario VARCHAR(255) NOT NULL,
     telefone_usuario VARCHAR(14) NOT NULL,
     cpf_usuario VARCHAR(14) UNIQUE NOT NULL,
     tipo_usuario TINYINT NOT NULL,
-    endereco_usuario varchar(255)
+    cidade_usario varchar(255),
+    estado_usuario varchar(255),
+    bairro_usuario varchar(255),
+    rua_usuario varchar(255)
 );
 
 CREATE TABLE Unidades (
@@ -128,63 +131,16 @@ VALUES
 
 INSERT INTO Planos (preco_plano, descricao_plano)
 VALUES
-(99.00, '1 unidade, Musculação, App TechFit, sem aulas coletivas, sem Personal Trainer'),
-(149.00, 'Todas unidades, Musculação, 4 aulas coletivas/mês, App TechFit, sem Personal Trainer'),
-(199.00, 'Todas unidades, Todos os cursos, Aulas ilimitadas, App TechFit Pro, 2 sessões personal/mês');
+(99.00, '1 unidade, Musculação, App TechFit, sem aulas coletivas'),
+(149.00, 'Todas unidades, Até 3 cursos, Aulas coletivas, App TechFit'),
+(199.00, 'Todas unidades, Todos os cursos a vontade, Aulas coletivas, App TechFit pro');
 
-INSERT INTO Usuarios (nome_usuario, email_usuario, senha_usuario_hash, telefone_usuario, cpf_usuario, tipo_usuario, endereco_usuario)
-VALUES
-('ADMIN', 'otaviosaturnino22@gmail.com', 'hash123', '(19)11111-1111', '111.111.111-11', 0, 'Rua João Gomes de Pinho, 83, Limeira'),
-('Gabriel Ramos', 'otaviosaturnino22@gmail.com',  'hash234', '(19)22222-2222', '222.222.222-22', 1, 'Chácara, 150, Limeira'),
-('Daniel Charlo', 'otaviosaturnino22@gmail.com',  'hash345', '(19)33333-3333', '333.333.333-33', 2, 'Luz do Sol, 200, Campinas'),
-('Gabriel Xavier', 'otaviosaturnino22@gmail.com',  'hash456', '(19)44444-4444', '444.444.444-44', 3, 'Rodinha, 50, Piracicaba'),
-('Eduardo Rocha', 'otaviosaturnino22@gmail.com',  'hash567', '(19)55555-5555', '555.555.555-55', 3, 'Rave, 80, Sorocaba'),
-('Artur Maia', 'otaviosaturnino22@gmail.com',  'hash678', '(19)66666-6666', '666.666.666-66', 3, 'Paulínia, 120, Ribeirão Preto'),
-('Douglas Júnior', 'otaviosaturnino22@gmail.com',  'hash789', '(19)77777-7777', '777.777.777-77', 3, 'Condomínio, 25, Araraquara'),
-('Murilo Coletta', 'otaviosaturnino22@gmail.com',  'hash890', '(19)88888-8888', '888.888.888-88', 3, 'Cordeiro, 300, São Carlos');
+update planos set descricao_plano='1 unidade, Musculação, App TechFit, sem aulas coletivas' where id_plano=1;
+update planos set descricao_plano='Todas unidades, Até 3 cursos, Aulas coletivas, App TechFit' where id_plano=2;
+update planos set descricao_plano='Todas unidades, Todos os cursos a vontade, Aulas coletivas, App TechFit pro' where id_plano=3;
 
-INSERT INTO Turmas (id_curso, responsavel_turma, nome_turma, data_inicio, data_fim, horario_turma)
-VALUES
-(1, 2, 'Musculação Manhã', '2025-10-20', '2026-01-20', '07:00 - 08:00'),
-(1, 2, 'Musculação Noite', '2025-10-20', '2026-01-20', '19:00 - 20:00'),
-(2, 3, 'Yoga Tarde', '2025-10-21', '2026-01-21', '17:00 - 18:15'),
-(3, 3, 'Pilates Noite', '2025-10-22', '2026-01-22', '19:00 - 19:55'),
-(4, 2, 'CrossFit Intermediário', '2025-10-20', '2026-01-20', '06:00 - 07:00'),
-(5, 2, 'Spinning Intensivo', '2025-10-21', '2026-01-21', '18:00 - 18:45'),
-(6, 3, 'Zumba Iniciante', '2025-10-23', '2026-01-23', '17:30 - 18:20'),
-(7, 2, 'Muay Thai Avançado', '2025-10-24', '2026-01-24', '19:00 - 20:10'),
-(8, 3, 'Natação Adulto', '2025-10-20', '2026-01-20', '08:00 - 08:45'),
-(9, 2, 'Treinamento Funcional', '2025-10-21', '2026-01-21', '07:30 - 08:25');
+select * from planos;
 
-INSERT INTO Usuario_Turma (id_turma, id_usuario)
-VALUES
-(1, 4), (2, 5), (3, 6), (4, 7),
-(5, 4), (6, 5), (7, 6), (8, 7),
-(9, 4);
+use techfit;
 
-INSERT INTO Usuario_Plano (id_plano, id_usuario, data_inicio_plano, data_fim_plano)
-VALUES
-(1, 4, '2025-10-01', '2026-01-01'),
-(2, 5, '2025-10-01', '2026-01-01'),
-(3, 6, '2025-10-01', '2026-01-01'),
-(2, 7, '2025-10-01', '2026-01-01');
-
-INSERT INTO Pagamentos (id_usuario, id_plano, tipo_pagamento, valor_pagamento)
-VALUES
-(4, 1, 1, 99.00),
-(5, 2, 2, 149.00),
-(6, 3, 1, 199.00),
-(7, 2, 2, 149.00);
-
-INSERT INTO Presencas (id_turma, id_usuario, data_aula, presente)
-VALUES
-(1, 4, '2025-10-21', TRUE),
-(2, 5, '2025-10-21', TRUE),
-(3, 6, '2025-10-22', TRUE),
-(4, 7, '2025-10-22', TRUE),
-(5, 4, '2025-10-23', FALSE),
-(6, 5, '2025-10-23', TRUE),
-(7, 6, '2025-10-24', TRUE),
-(8, 7, '2025-10-24', TRUE),
-(9, 4, '2025-10-25', TRUE);
-
+select * from usuarios;
