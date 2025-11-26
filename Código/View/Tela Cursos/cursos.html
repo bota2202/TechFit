@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="PT-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechFit - Tela Inicial</title>
-    <link rel="stylesheet" href="inicial.css">
+    <title>TechFit - Cursos</title>
+    <link rel="stylesheet" href="../../Public/css/cursos.css">
+    <link rel="stylesheet" href="../../Public/css/nav.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="../nav.css">
 </head>
 <body>
+    
     <nav>
         <section class="nav-esquerda">
             <p class="logo_techfit">TechFit</p>
         </section>
 
         <section class="nav-centro">
-            <a class="btn-nav-centro btn-ativo" href="../Tela inicial/inicial.html#hero">Início</a>
+            <a class="btn-nav-centro" href="../Tela inicial/inicial.html#hero">Início</a>
             <a class="btn-nav-centro" href="../Tela planos/planos.html">Planos</a>
             <a class="btn-nav-centro" href="../Tela unidades/unidades.html">Unidades</a>
-            <a class="btn-nav-centro" href="../Tela cursos/cursos.html">Cursos</a>
+            <a class="btn-nav-centro btn-ativo" href="../Tela cursos/cursos.html">Cursos</a>
         </section>
 
         <section class="nav-direita">
@@ -30,41 +31,30 @@
         </section>
     </nav>
 
-    <section id="hero" class="hero-section">
-        <div class="hero-content">
-            <h1>Transforme seu corpo e mente</h1>
-            <p>A tecnologia encontra o fitness para resultados extraordinários</p>
-            <a class="hero-cta" href="inicial.html#comecar-agora">Comece agora</a>
-        </div>
-    </section>
+    <main>
+        <section class="cursos-container">
+            <div class="filtros">
+                <button class="filtro-btn ativo" data-tipo="todos">
+                    <i class="fas fa-th"></i> Todos
+                </button>
+                <button class="filtro-btn" data-tipo="forca">
+                    <i class="fas fa-dumbbell"></i> Força
+                </button>
+                <button class="filtro-btn" data-tipo="cardio">
+                    <i class="fas fa-heart"></i> Cardio
+                </button>
+                <button class="filtro-btn" data-tipo="mente-corpo">
+                    <i class="fas fa-leaf"></i> Mente-Corpo
+                </button>
+                <button class="filtro-btn" data-tipo="lutas">
+                    <i class="fas fa-fist-raised"></i> Lutas
+                </button>
+            </div>
 
-    <section class="content-section" id="comecar-agora">
-        <h2>Por que escolher TechFit?</h2>
-        <p>Oferecemos uma experiência única que combina tecnologia de ponta com metodologias comprovadas de treinamento para ajudá-lo a alcançar seus objetivos de forma eficiente e sustentável.</p>
-        
-        <div class="cards-container" id="cards-container">
-            <div class="card">
-                <div class="card-icon">💪</div>
-                <h3>Diferentes cursos</h3>
-                <p>Independentemente de seus gostos ou habilidades, temos cursos para todos.</p>
-                <a href="../Tela cursos/cursos.html" class="btn-geral">Ver cursos</a>
+            <div class="cursos-grid" id="cursos-grid">
             </div>
-            
-            <div class="card">
-                <div class="card-icon">🏠</div>
-                <h3>Sempre perto</h3>
-                <p>Várias unidades espalhadas pelo Brasil, para que você possa ir onde quer que esteja.</p>
-                <a class="btn-geral" href="../Tela unidades/unidades.html">Ver unidades</a>
-            </div>
-            
-            <div class="card">
-                <div class="card-icon">💲</div>
-                <h3>Cabe no seu bolso</h3>
-                <p>Temos diferentes planos que se adaptam a você e ao seu bolso, sempre pensando no seu bem-estar.</p>
-                <a href="../Tela planos/planos.html" class="btn-geral">Ver planos</a>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <footer>
         <div class="footer-content">
@@ -90,5 +80,19 @@
         </div>
     </footer>
 
+    <div class="modal-overlay" id="modal-turmas">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="modal-titulo" id="modal-titulo">Turmas</h2>
+                <button class="modal-fechar">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-conteudo"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../Public/js/cursos.js"></script>
 </body>
 </html>
+

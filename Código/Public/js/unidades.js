@@ -6,7 +6,7 @@ const unidades = [
         bairro: 'Centro',
         rua: 'Av. Campinas',
         numero: 1500,
-        imagem: '../Imagens/limeira.jpg'
+        imagem: '../../Public/Imagens/limeira.jpg'
     },
     {
         id: 2,
@@ -15,7 +15,7 @@ const unidades = [
         bairro: 'Centro',
         rua: 'R. Barão de Jaguara',
         numero: 900,
-        imagem: '../Imagens/campinas.jpg'
+        imagem: '../../Public/Imagens/campinas.jpg'
     },
     {
         id: 3,
@@ -24,7 +24,7 @@ const unidades = [
         bairro: 'Centro',
         rua: 'Av. Independência',
         numero: 2100,
-        imagem: '../Imagens/piracicaba.jpg'
+        imagem: '../../Public/Imagens/piracicaba.jpg'
     },
     {
         id: 4,
@@ -33,7 +33,7 @@ const unidades = [
         bairro: 'Centro',
         rua: 'R. XV de Novembro',
         numero: 450,
-        imagem: '../Imagens/sorocaba.jpg'
+        imagem: '../../Public/Imagens/sorocaba.jpg'
     },
     {
         id: 5,
@@ -42,7 +42,7 @@ const unidades = [
         bairro: 'Jardim Paulista',
         rua: 'Av. Pres. Vargas',
         numero: 1800,
-        imagem: '../Imagens/ribeirao.jpg'
+        imagem: '../../Public/Imagens/ribeirao.jpg'
     },
     {
         id: 6,
@@ -51,7 +51,7 @@ const unidades = [
         bairro: 'Centro',
         rua: 'Av. Bento de Abreu',
         numero: 300,
-        imagem: '../Imagens/araraquara.jpg'
+        imagem: '../../Public/Imagens/araraquara.jpg'
     },
     {
         id: 7,
@@ -60,7 +60,7 @@ const unidades = [
         bairro: 'Centro',
         rua: 'R. Episcopal',
         numero: 1200,
-        imagem: '../Imagens/saocarlos.jpg'
+        imagem: '../../Public/Imagens/saocarlos.jpg'
     },
     {
         id: 8,
@@ -69,7 +69,7 @@ const unidades = [
         bairro: 'Anhangabaú',
         rua: 'Av. Jundiaí',
         numero: 500,
-        imagem: '../Imagens/jundiai.jpg'
+        imagem: '../../Public/Imagens/jundiai.jpg'
     },
     {
         id: 9,
@@ -78,7 +78,7 @@ const unidades = [
         bairro: 'Centro',
         rua: 'Av. Getúlio Vargas',
         numero: 100,
-        imagem: '../Imagens/bauru.jpg'
+        imagem: '../../Public/Imagens/bauru.jpg'
     },
     {
         id: 10,
@@ -87,7 +87,7 @@ const unidades = [
         bairro: 'Boa Vista',
         rua: 'R. Bernardino',
         numero: 950,
-        imagem: '../Imagens/riopreto.jpg'
+        imagem: '../../Public/Imagens/riopreto.jpg'
     },
     {
         id: 11,
@@ -96,7 +96,7 @@ const unidades = [
         bairro: 'Fragata',
         rua: 'Av. das Esmeraldas',
         numero: 400,
-        imagem: '../Imagens/marilia.jpg'
+        imagem: '../../Public/Imagens/marilia.jpg'
     },
     {
         id: 12,
@@ -105,7 +105,7 @@ const unidades = [
         bairro: 'Vila Nova',
         rua: 'Av. Manoel Goulart',
         numero: 1300,
-        imagem: '../Imagens/presidente.jpg'
+        imagem: '../../Public/Imagens/presidente.jpg'
     },
     {
         id: 13,
@@ -114,7 +114,7 @@ const unidades = [
         bairro: 'Centro',
         rua: 'R. Fernando Camargo',
         numero: 800,
-        imagem: '../Imagens/americana.jpg'
+        imagem: '../../Public/Imagens/americana.jpg'
     },
     {
         id: 14,
@@ -123,7 +123,7 @@ const unidades = [
         bairro: 'Cidade Nova',
         rua: 'Av. Pres. Kennedy',
         numero: 700,
-        imagem: '../Imagens/indaiatuba.jpg'
+        imagem: '../../Public/Imagens/indaiatuba.jpg'
     },
     {
         id: 15,
@@ -132,7 +132,7 @@ const unidades = [
         bairro: 'Alphaville',
         rua: 'Av. Arnaldo Rodrigues',
         numero: 250,
-        imagem: '../Imagens/barueri.jpg'
+        imagem: '../../Public/Imagens/barueri.jpg'
     }
 ];
 

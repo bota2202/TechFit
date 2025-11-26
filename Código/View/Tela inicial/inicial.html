@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<html lang="PT-BR">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechFit - Unidades</title>
-    <link rel="stylesheet" href="unidades.css">
-    <link rel="stylesheet" href="../nav.css">
+    <title>TechFit - Tela Inicial</title>
+    <link rel="stylesheet" href="../../Public/css/inicial.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../../Public/css/nav.css">
 </head>
 <body>
-    
     <nav>
         <section class="nav-esquerda">
             <p class="logo_techfit">TechFit</p>
         </section>
 
         <section class="nav-centro">
-            <a class="btn-nav-centro" href="../Tela inicial/inicial.html#hero">Início</a>
+            <a class="btn-nav-centro btn-ativo" href="../Tela inicial/inicial.html#hero">Início</a>
             <a class="btn-nav-centro" href="../Tela planos/planos.html">Planos</a>
-            <a class="btn-nav-centro btn-ativo" href="../Tela unidades/unidades.html">Unidades</a>
+            <a class="btn-nav-centro" href="../Tela unidades/unidades.html">Unidades</a>
             <a class="btn-nav-centro" href="../Tela cursos/cursos.html">Cursos</a>
         </section>
 
@@ -31,13 +30,41 @@
         </section>
     </nav>
 
-    <main>
-        <div class="lista-unidades" id="lista-unidades">
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <h1>Transforme seu corpo e mente</h1>
+            <p>A tecnologia encontra o fitness para resultados extraordinários</p>
+            <a class="hero-cta" href="inicial.html#comecar-agora">Comece agora</a>
         </div>
+    </section>
+
+    <section class="content-section" id="comecar-agora">
+        <h2>Por que escolher TechFit?</h2>
+        <p>Oferecemos uma experiência única que combina tecnologia de ponta com metodologias comprovadas de treinamento para ajudá-lo a alcançar seus objetivos de forma eficiente e sustentável.</p>
         
-        <div class="detalhes-unidade vazio" id="detalhes-unidade">
+        <div class="cards-container" id="cards-container">
+            <div class="card">
+                <div class="card-icon">💪</div>
+                <h3>Diferentes cursos</h3>
+                <p>Independentemente de seus gostos ou habilidades, temos cursos para todos.</p>
+                <a href="../Tela cursos/cursos.html" class="btn-geral">Ver cursos</a>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🏠</div>
+                <h3>Sempre perto</h3>
+                <p>Várias unidades espalhadas pelo Brasil, para que você possa ir onde quer que esteja.</p>
+                <a class="btn-geral" href="../Tela unidades/unidades.html">Ver unidades</a>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">💲</div>
+                <h3>Cabe no seu bolso</h3>
+                <p>Temos diferentes planos que se adaptam a você e ao seu bolso, sempre pensando no seu bem-estar.</p>
+                <a href="../Tela planos/planos.html" class="btn-geral">Ver planos</a>
+            </div>
         </div>
-    </main>
+    </section>
 
     <footer>
         <div class="footer-content">
@@ -63,7 +90,5 @@
         </div>
     </footer>
 
-    <script src="../DB/atualizar_nav.js"></script>
-    <script src="unidades.js"></script>
 </body>
 </html>

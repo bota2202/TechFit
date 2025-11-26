@@ -5,7 +5,7 @@ const cursos = [
         tipo: 'forca',
         descricao: 'Treinos completos para ganho de massa e força com acompanhamento profissional especializado.',
         preco: 99.00,
-        imagem: '../Imagens/musculacao.jpg'
+        imagem: '../../Public/Imagens/musculacao.jpg'
     },
     {
         id: 2,
@@ -13,7 +13,7 @@ const cursos = [
         tipo: 'mente-corpo',
         descricao: 'Equilíbrio, alongamento e bem-estar físico e mental com professores especializados.',
         preco: 149.00,
-        imagem: '../Imagens/yoga.jpg'
+        imagem: '../../Public/Imagens/yoga.jpg'
     },
     {
         id: 3,
@@ -21,7 +21,7 @@ const cursos = [
         tipo: 'mente-corpo',
         descricao: 'Fortaleça seu corpo e melhore sua postura com aulas modernas de Pilates.',
         preco: 149.00,
-        imagem: '../Imagens/pilates.jpg'
+        imagem: '../../Public/Imagens/pilates.jpg'
     },
     {
         id: 4,
@@ -29,7 +29,7 @@ const cursos = [
         tipo: 'forca',
         descricao: 'Treinos intensos de alta performance para resistência e condicionamento físico.',
         preco: 199.00,
-        imagem: '../Imagens/crossfit.jpg'
+        imagem: '../../Public/Imagens/crossfit.jpg'
     },
     {
         id: 5,
@@ -37,7 +37,7 @@ const cursos = [
         tipo: 'cardio',
         descricao: 'Aulas dinâmicas de bike indoor com muita energia e queima calórica intensa.',
         preco: 149.00,
-        imagem: '../Imagens/spinning.jpg'
+        imagem: '../../Public/Imagens/spinning.jpg'
     },
     {
         id: 6,
@@ -45,7 +45,7 @@ const cursos = [
         tipo: 'cardio',
         descricao: 'Dance, divirta-se e entre em forma com coreografias animadas e intensas.',
         preco: 99.00,
-        imagem: '../Imagens/zumba.jpg'
+        imagem: '../../Public/Imagens/zumba.jpg'
     },
     {
         id: 7,
@@ -53,7 +53,7 @@ const cursos = [
         tipo: 'lutas',
         descricao: 'Defesa pessoal e condicionamento físico com artes marciais de alto impacto.',
         preco: 199.00,
-        imagem: '../Imagens/muaythai.jpg'
+        imagem: '../../Public/Imagens/muaythai.jpg'
     },
     {
         id: 8,
@@ -61,7 +61,7 @@ const cursos = [
         tipo: 'cardio',
         descricao: 'Aulas para todas as idades, desenvolvendo resistência e saúde cardiovascular.',
         preco: 149.00,
-        imagem: '../Imagens/natacao.jpg'
+        imagem: '../../Public/Imagens/natacao.jpg'
     },
     {
         id: 9,
@@ -69,7 +69,7 @@ const cursos = [
         tipo: 'forca',
         descricao: 'Movimentos naturais para melhorar força, coordenação e qualidade de vida.',
         preco: 149.00,
-        imagem: '../Imagens/funcional.jpg'
+        imagem: '../../Public/Imagens/funcional.jpg'
     }
 ];
 
