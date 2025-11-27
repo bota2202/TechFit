@@ -1,22 +1,39 @@
-// Variáveis globais
 let currentStep = 1;
 const totalSteps = 3;
 
-// Inicialização quando o DOM estiver carregado
+function mostrarErro(mensagem) {
+    const erroDiv = document.getElementById('mensagem-erro');
+    const sucessoDiv = document.getElementById('mensagem-sucesso');
+    erroDiv.textContent = mensagem;
+    erroDiv.style.display = 'block';
+    sucessoDiv.style.display = 'none';
+    erroDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function mostrarSucesso(mensagem) {
+    const erroDiv = document.getElementById('mensagem-erro');
+    const sucessoDiv = document.getElementById('mensagem-sucesso');
+    sucessoDiv.textContent = mensagem;
+    sucessoDiv.style.display = 'block';
+    erroDiv.style.display = 'none';
+}
+
+function esconderMensagens() {
+    document.getElementById('mensagem-erro').style.display = 'none';
+    document.getElementById('mensagem-sucesso').style.display = 'none';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeForm();
     setupEventListeners();
 });
 
-// Inicializa o formulário
 function initializeForm() {
     updateProgressBar();
     updateStepIndicators();
 }
 
-// Configura os event listeners
 function setupEventListeners() {
-    // Botões de navegação
     document.querySelectorAll('.btn-next').forEach(button => {
         button.addEventListener('click', handleNextStep);
     });
@@ -25,18 +42,14 @@ function setupEventListeners() {
         button.addEventListener('click', handlePrevStep);
     });
     
-    // Formatação de CPF e telefone
     document.getElementById('cpf-sign').addEventListener('input', formatCPF);
     document.getElementById('telefone-sign').addEventListener('input', formatPhone);
     
-    // Carregamento de cidades
     document.getElementById('estado-sign').addEventListener('change', handleStateChange);
     
-    // Validação do formulário
     document.querySelector('.form-sign').addEventListener('submit', validateForm);
 }
 
-// Avança para a próxima etapa
 function handleNextStep(e) {
     const nextStep = parseInt(e.target.getAttribute('data-next'));
     
@@ -45,29 +58,20 @@ function handleNextStep(e) {
     }
 }
 
-// Volta para a etapa anterior
 function handlePrevStep(e) {
     const prevStep = parseInt(e.target.getAttribute('data-prev'));
     changeStep(prevStep);
 }
 
-// Altera a etapa atual
 function changeStep(step) {
-    // Esconde a etapa atual
     document.querySelector(`.form-step.active`).classList.remove('active');
-    
-    // Mostra a nova etapa
     document.querySelector(`#${getStepId(step)}`).classList.add('active');
-    
-    // Atualiza a etapa atual
     currentStep = step;
-    
-    // Atualiza a barra de progresso e indicadores
     updateProgressBar();
     updateStepIndicators();
+    esconderMensagens();
 }
 
-// Retorna o ID da seção com base na etapa
 function getStepId(step) {
     switch(step) {
         case 1: return 'dadospessoais';
@@ -77,14 +81,12 @@ function getStepId(step) {
     }
 }
 
-// Atualiza a barra de progresso
 function updateProgressBar() {
     const progressFill = document.getElementById('progress-fill');
     const progressPercentage = (currentStep / totalSteps) * 100;
     progressFill.style.width = `${progressPercentage}%`;
 }
 
-// Atualiza os indicadores de etapa
 function updateStepIndicators() {
     document.querySelectorAll('.step').forEach(step => {
         const stepNumber = parseInt(step.getAttribute('data-step'));
@@ -97,29 +99,27 @@ function updateStepIndicators() {
     });
 }
 
-// Valida a etapa atual
 function validateCurrentStep() {
     const currentStepElement = document.querySelector('.form-step.active');
     const inputs = currentStepElement.querySelectorAll('input[required], select[required]');
     
     for (let input of inputs) {
         if (!input.value.trim()) {
-            alert(`Por favor, preencha o campo: ${input.previousElementSibling.textContent}`);
+            mostrarErro(`Por favor, preencha o campo: ${input.previousElementSibling.textContent}`);
             input.focus();
             return false;
         }
     }
     
-    // Validações específicas por etapa
     if (currentStep === 1) {
         if (!validateEmail(document.getElementById('email-sign').value)) {
-            alert('Por favor, insira um e-mail válido.');
+            mostrarErro('Por favor, insira um e-mail válido.');
             document.getElementById('email-sign').focus();
             return false;
         }
         
         if (!validateCPF(document.getElementById('cpf-sign').value)) {
-            alert('Por favor, insira um CPF válido.');
+            mostrarErro('Por favor, insira um CPF válido.');
             document.getElementById('cpf-sign').focus();
             return false;
         }
@@ -128,10 +128,11 @@ function validateCurrentStep() {
     return true;
 }
 
-// Valida o formulário completo no envio
-function validateForm(e) {
+async function validateForm(e) {
+    e.preventDefault();
+    esconderMensagens();
+    
     if (!validateCurrentStep()) {
-        e.preventDefault();
         return false;
     }
     
@@ -139,23 +140,62 @@ function validateForm(e) {
     const confirmar = document.getElementById('confirmar-sign').value;
 
     if (senha !== confirmar) {
-        e.preventDefault();
-        alert('As senhas não coincidem!');
+        mostrarErro('As senhas não coincidem!');
         document.getElementById('confirmar-sign').focus();
         return false;
     }
 
     if (senha.length < 6) {
-        e.preventDefault();
-        alert('A senha deve ter pelo menos 6 caracteres!');
+        mostrarErro('A senha deve ter pelo menos 6 caracteres!');
         document.getElementById('senha-sign').focus();
         return false;
     }
     
-    return true;
+    const formData = new FormData();
+    formData.append('nome', document.getElementById('nome-sign').value);
+    formData.append('email', document.getElementById('email-sign').value);
+    formData.append('cpf', document.getElementById('cpf-sign').value);
+    formData.append('telefone', document.getElementById('telefone-sign').value);
+    formData.append('senha', senha);
+    formData.append('rua', document.getElementById('rua-sign').value);
+    formData.append('bairro', document.getElementById('bairro-sign').value);
+    formData.append('cidade', document.getElementById('cidade-sign').value);
+    formData.append('estado', document.getElementById('estado-sign').value);
+    
+    try {
+        const response = await fetch('cadastro.php', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+        }
+        
+        const text = await response.text();
+        let data;
+        
+        try {
+            data = JSON.parse(text);
+        } catch (parseError) {
+            throw new Error(`Erro ao processar resposta do servidor. Resposta recebida: ${text.substring(0, 200)}`);
+        }
+        
+        if (data.success) {
+            mostrarSucesso('Cadastro realizado com sucesso! Redirecionando...');
+            setTimeout(() => {
+                window.location.href = '../PageLogin/telalogin.html';
+            }, 1500);
+        } else {
+            mostrarErro(data.message || 'Erro desconhecido ao realizar cadastro');
+        }
+    } catch (error) {
+        mostrarErro(`Erro ao realizar cadastro: ${error.message}`);
+    }
+    
+    return false;
 }
 
-// Formatação de CPF
 function formatCPF(e) {
     let value = e.target.value.replace(/\D/g, '');
     if (value.length <= 11) {
@@ -166,13 +206,11 @@ function formatCPF(e) {
     }
 }
 
-// Validação de CPF (simplificada)
 function validateCPF(cpf) {
     cpf = cpf.replace(/\D/g, '');
     return cpf.length === 11;
 }
 
-// Formatação de telefone
 function formatPhone(e) {
     let value = e.target.value.replace(/\D/g, '');
     if (value.length <= 11) {
@@ -182,18 +220,15 @@ function formatPhone(e) {
     }
 }
 
-// Validação de e-mail
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
 
-// Carregamento de cidades
 async function handleStateChange() {
     const uf = this.value;
     const cidadesSelect = document.getElementById('cidade-sign');
 
-    // Remove a opção inicial se existir
     const first = this.querySelector("option[value='']");
     if (first) first.remove();
 
@@ -218,11 +253,9 @@ async function handleStateChange() {
         });
     } catch (erro) {
         cidadesSelect.innerHTML = "<option>Erro ao carregar cidades</option>";
-        console.error('Erro ao buscar cidades:', erro);
     }
 }
 
-// Remove a opção inicial quando uma cidade é selecionada
 document.getElementById('cidade-sign').addEventListener("change", function() {
     const first = this.querySelector("option[value='']");
     if (first && this.value !== '') first.remove();

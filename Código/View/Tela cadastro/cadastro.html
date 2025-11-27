@@ -13,7 +13,9 @@
             <p>Cadastro de Membro</p>
         </div>
 
-        <form action="cadastro.php" method="post" class="form-sign">
+        <form id="form-cadastro" class="form-sign">
+            <div id="mensagem-erro" style="display: none; background: #e74c3c; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;"></div>
+            <div id="mensagem-sucesso" style="display: none; background: #27ae60; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;"></div>
             <div class="progress-container">
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress-fill"></div>
