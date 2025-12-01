@@ -23,7 +23,7 @@ CREATE TABLE Unidades (
     numero_unidade INT NOT NULL
 );
 
-CREATE TABLE Planos (
+CREATE TABLE Planos( 
     id_plano INT AUTO_INCREMENT PRIMARY KEY,
     preco_plano DECIMAL(5,2) NOT NULL,
     descricao_plano VARCHAR(500)

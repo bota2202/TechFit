@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechFit - Cadastro</title>
+    <link rel="stylesheet" href="../Public/css/cadastro.css">
+</head>
+<body>
+
+<div class="form-container">
+    <div class="form-header">
+        <h1>TECHFIT</h1>
+        <p>Cadastro de Membro</p>
+    </div>
+
+    <form action="../index.php?action=store" method="post" class="form-sign">
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <main id="sign-fields">
+
+            <section id="dadospessoais" class="form-step active">
+                <h2>Dados Pessoais</h2>
+
+                <label>Nome Completo</label>
+                <input type="text" name="nome" class="campo-sign" required>
+
+                <label>Email</label>
+                <input type="email" name="email" class="campo-sign" required>
+
+                <label>CPF</label>
+                <input type="text" name="cpf" class="campo-sign" required>
+
+                <label>Telefone</label>
+                <input type="text" name="telefone" class="campo-sign" required>
+
+                <div class="button-group">
+                    <button type="button" class="btn-next" data-next="2">Próximo</button>
+                </div>
+            </section>
+
+            <section id="endereco" class="form-step">
+                <h2>Endereço</h2>
+
+                <label>Estado</label>
+                <select name="estado" id="estado-sign" class="campo-sign" required>
+                    <option value="">Selecione</option>
+                    <option value="SP">SP</option>
+                    <option value="RJ">RJ</option>
+                    <option value="MG">MG</option>
+                    <option value="PR">PR</option>
+                </select>
+
+                <label>Cidade</label>
+                <input type="text" name="cidade" class="campo-sign" required>
+
+                <label>Endereço completo</label>
+                <input type="text" name="endereco" class="campo-sign" required>
+
+                <div class="button-group">
+                    <button type="button" class="btn-prev" data-prev="1">Voltar</button>
+                    <button type="button" class="btn-next" data-next="3">Próximo</button>
+                </div>
+            </section>
+
+            <section id="senha" class="form-step">
+                <h2>Segurança</h2>
+
+                <label>Senha</label>
+                <input type="password" name="senha" class="campo-sign" required>
+
+                <label>Confirmar senha</label>
+                <input type="password" name="confirmar" class="campo-sign" required>
+
+                <div class="button-group">
+                    <button type="button" class="btn-prev" data-prev="2">Voltar</button>
+                    <button type="submit">Cadastrar</button>
+                </div>
+            </section>
+
+        </main>
+
+        <div class="links">
+            <a href="../index.php?action=login">Já tem uma conta?</a>
+            <a href="inicial.html">Voltar à tela inicial</a>
+        </div>
+
+    </form>
+</div>
+
+<script src="../Public/js/cadastro.js"></script>
+</body>
+</html>
