@@ -6,13 +6,13 @@ CREATE TABLE Usuarios (
     email_usuario VARCHAR(255) NOT NULL UNIQUE,
     senha_usuario_hash VARCHAR(255) NOT NULL,
     nome_usuario VARCHAR(255) NOT NULL,
-    telefone_usuario VARCHAR(14) NOT NULL,
+    telefone_usuario VARCHAR(15) NOT NULL,
     cpf_usuario VARCHAR(14) UNIQUE NOT NULL,
-    tipo_usuario TINYINT NOT NULL,
-    cidade_usario varchar(255),
-    estado_usuario varchar(255),
-    bairro_usuario varchar(255),
-    rua_usuario varchar(255)
+    tipo_usuario TINYINT NOT NULL DEFAULT 3,
+    cidade_usario VARCHAR(255),
+    estado_usuario VARCHAR(255),
+    bairro_usuario VARCHAR(255),
+    rua_usuario VARCHAR(255)
 );
 
 CREATE TABLE Unidades (
