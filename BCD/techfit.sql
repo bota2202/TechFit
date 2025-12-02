@@ -9,7 +9,7 @@ CREATE TABLE Usuarios (
     telefone_usuario VARCHAR(15) NOT NULL,
     cpf_usuario VARCHAR(14) UNIQUE NOT NULL,
     tipo_usuario TINYINT NOT NULL DEFAULT 3,
-    cidade_usario VARCHAR(255),
+    cidade_usuario VARCHAR(255),
     estado_usuario VARCHAR(255),
     bairro_usuario VARCHAR(255),
     rua_usuario VARCHAR(255)

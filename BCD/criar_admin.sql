@@ -13,7 +13,7 @@ INSERT INTO Usuarios (
     telefone_usuario,
     cpf_usuario,
     tipo_usuario,
-    cidade_usario,
+    cidade_usuario,
     estado_usuario,
     bairro_usuario,
     rua_usuario

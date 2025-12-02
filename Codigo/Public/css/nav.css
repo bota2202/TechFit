@@ -1,0 +1,192 @@
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    background: rgba(41, 41, 41, 0.95);
+    backdrop-filter: blur(10px);
+    height: 80px;
+    padding: 0 40px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+nav > section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.nav-esquerda {
+    justify-content: flex-start;
+}
+
+.nav-centro {
+    justify-content: center;
+    gap: 20px;
+}
+
+.nav-direita {
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.logo_techfit {
+    background: linear-gradient(146deg,
+        rgba(255,255,255,1) 0%,
+        rgba(36,255,36,1) 50%,
+        rgba(0,199,0,1) 71%,
+        rgba(0,198,0,1) 84%,
+        rgba(0,128,0,1) 100%
+    );
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    font-size: 2.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+}
+
+.btn-nav-centro {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1.5px solid #00c700;
+    background-color: transparent;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.btn-nav-centro:hover {
+    transform: translateY(-2px);
+    background-color: #00c700;
+    color: black;
+    box-shadow: 0 4px 12px rgba(0, 199, 0, 0.3);
+}
+
+.btn-ativo {
+    background-color: #00c700;
+    color: black;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 199, 0, 0.2);
+}
+
+.btn-nav-direita {
+    padding: 10px 17px;
+    border-radius: 7px;
+    font-size: 1rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-nav-direita:hover {
+    transform: scale(1.1);
+}
+
+.btn-login {
+    background-color: white;
+    color: black;
+    border-radius: 10px;
+}
+
+.btn-sign {
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+}
+
+.usuario-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #00c700, #008000);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    user-select: none;
+}
+
+.usuario-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0,199,0,0.4);
+}
+
+.usuario-menu {
+    position: relative;
+}
+
+.usuario-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    min-width: 200px;
+    display: none;
+    z-index: 1001;
+    overflow: hidden;
+}
+
+.usuario-menu:hover .usuario-dropdown {
+    display: block;
+}
+
+.usuario-dropdown-item {
+    padding: 15px 20px;
+    color: #333;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.usuario-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.usuario-dropdown-item:hover {
+    background: #f5f5f5;
+    color: #008000;
+}
+
+.usuario-dropdown-item.logout {
+    color: #e74c3c;
+}
+
+.usuario-dropdown-item.logout:hover {
+    background: #ffeaea;
+}
+
+@media (max-width: 768px) {
+    .logo_techfit {
+        font-size: 1.8rem;
+    }
+
+    .nav-centro {
+        display: none;
+    }
+
+    nav {
+        padding: 0 20px;
+        height: 70px;
+    }
+}
+
