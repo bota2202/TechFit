@@ -1,7 +1,4 @@
 <?php
-/**
- * DAO Mensagem - TechFit
- */
 
 require_once __DIR__ . '/Conexao.php';
 require_once __DIR__ . '/Mensagem.php';
@@ -125,21 +122,20 @@ class MensagemDAO
         return $stmt->execute([':id' => $id]);
     }
 
-    /**
-     * Busca conversa entre dois usuários
-     */
     public function readConversa($idUsuario1, $idUsuario2)
     {
         $sql = "SELECT * FROM Mensagens 
                 WHERE ((id_remetente = :id1 AND id_destinatario = :id2) 
-                   OR (id_remetente = :id2 AND id_destinatario = :id1))
+                   OR (id_remetente = :id3 AND id_destinatario = :id4))
                 AND (tipo != 'turma' OR tipo IS NULL)
                 ORDER BY data_envio ASC";
         
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             ':id1' => $idUsuario1,
-            ':id2' => $idUsuario2
+            ':id2' => $idUsuario2,
+            ':id3' => $idUsuario2,
+            ':id4' => $idUsuario1
         ]);
         
         $result = [];
@@ -160,28 +156,56 @@ class MensagemDAO
         return $result;
     }
 
-    /**
-     * Busca lista de conversas do usuário
-     */
     public function readConversas($idUsuario)
     {
-        $sql = "SELECT DISTINCT 
-                    CASE 
-                        WHEN id_remetente = :id_usuario THEN id_destinatario 
-                        ELSE id_remetente 
-                    END as outro_usuario,
-                    MAX(data_envio) as ultima_mensagem
-                FROM Mensagens 
-                WHERE (id_remetente = :id_usuario OR id_destinatario = :id_usuario)
-                  AND tipo != 'turma'
-                  AND id_destinatario IS NOT NULL
+        $sql = "SELECT 
+                    outro_usuario,
+                    MAX(data_envio) as ultima_mensagem,
+                    MIN(assunto) as titulo_conversa
+                FROM (
+                    SELECT 
+                        CASE 
+                            WHEN id_remetente = :id_usuario1 THEN id_destinatario 
+                            ELSE id_remetente 
+                        END as outro_usuario,
+                        data_envio,
+                        assunto
+                    FROM Mensagens 
+                    WHERE (id_remetente = :id_usuario2 OR id_destinatario = :id_usuario3)
+                      AND tipo != 'turma'
+                      AND id_destinatario IS NOT NULL
+                ) as conversas
                 GROUP BY outro_usuario
                 ORDER BY ultima_mensagem DESC";
         
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id_usuario' => $idUsuario]);
+        $stmt->execute([
+            ':id_usuario1' => $idUsuario,
+            ':id_usuario2' => $idUsuario,
+            ':id_usuario3' => $idUsuario
+        ]);
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function getTituloConversa($idUsuario1, $idUsuario2)
+    {
+        $sql = "SELECT assunto FROM Mensagens 
+                WHERE ((id_remetente = :id1 AND id_destinatario = :id2) 
+                   OR (id_remetente = :id3 AND id_destinatario = :id4))
+                AND tipo != 'turma'
+                ORDER BY data_envio ASC LIMIT 1";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':id1' => $idUsuario1,
+            ':id2' => $idUsuario2,
+            ':id3' => $idUsuario2,
+            ':id4' => $idUsuario1
+        ]);
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['assunto'] : 'Nova conversa';
     }
 }
 

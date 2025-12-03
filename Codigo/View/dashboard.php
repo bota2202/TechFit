@@ -1,8 +1,4 @@
 <?php
-/**
- * Dashboard do Aluno - TechFit
- * Área restrita para usuários logados
- */
 
 session_start();
 
@@ -12,14 +8,26 @@ require_once __DIR__ . '/../Model/Conexao.php';
 require_once __DIR__ . '/../Model/TreinoDAO.php';
 require_once __DIR__ . '/../Model/DietaDAO.php';
 
-// Verifica se o usuário está logado
 Auth::requireAuth();
 
 $usuario = $_SESSION['usuario'];
+
+require_once __DIR__ . '/../Model/helpers.php';
+
+if (Auth::isAdmin()) {
+    $_SESSION['erro'] = 'Acesso negado. Administradores devem usar o Dashboard Admin.';
+    header('Location: ' . getViewUrl('dashboard_admin.php'));
+    exit;
+}
+
+if (Auth::isInstrutor()) {
+    header('Location: ' . getViewUrl('dashboard_instrutor.php'));
+    exit;
+}
+
 $treinoDAO = new TreinoDAO();
 $dietaDAO = new DietaDAO();
 
-// Busca treinos e dietas do usuário
 $treinos = $treinoDAO->readByUsuarioId($usuario['id']);
 $dietas = $dietaDAO->readByUsuarioId($usuario['id']);
 ?>
@@ -29,6 +37,8 @@ $dietas = $dietaDAO->readByUsuarioId($usuario['id']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechFit - Área do Aluno</title>
+    <link rel="icon" type="image/svg+xml" href="../Public/favicon.svg">
+    <link rel="alternate icon" href="../Public/favicon.svg">
     <link rel="stylesheet" href="../Public/css/aluno.css">
     <link rel="stylesheet" href="../Public/css/nav.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -65,7 +75,12 @@ $dietas = $dietaDAO->readByUsuarioId($usuario['id']);
                     <a href="#" class="usuario-dropdown-item">
                         <i class="fas fa-user me-2"></i><?php echo htmlspecialchars($usuario['nome']); ?>
                     </a>
-                    <a href="dashboard.php" class="usuario-dropdown-item">Área do Aluno</a>
+                    <a href="mensagens.php" class="usuario-dropdown-item">
+                        <i class="fas fa-envelope me-2"></i>Mensagens
+                    </a>
+                    <a href="perfil.php" class="usuario-dropdown-item">
+                        <i class="fas fa-cog me-2"></i>Configurações
+                    </a>
                     <a href="../../index.php?action=logout" class="usuario-dropdown-item logout">
                         <i class="fas fa-sign-out-alt me-2"></i>Sair
                     </a>

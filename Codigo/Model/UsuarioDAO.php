@@ -13,9 +13,6 @@ class UsuarioDAO
         $this->criarTabela();
     }
 
-    /**
-     * Cria a tabela Usuarios se não existir
-     */
     private function criarTabela()
     {
         $sql = "CREATE TABLE IF NOT EXISTS Usuarios (
@@ -43,11 +40,10 @@ class UsuarioDAO
     {
         $sql = "INSERT INTO usuarios(nome_usuario,email_usuario,senha_usuario_hash,telefone_usuario,cpf_usuario,cidade_usuario,estado_usuario,bairro_usuario,rua_usuario) VALUES (?,?,?,?,?,?,?,?,?)";
         $stmt = $this->conn->prepare($sql);
-        // A senha já vem hasheada do Controller, não precisa hash novamente
         $stmt->execute([
             $u->getNome(),
             $u->getEmail(),
-            $u->getSenha(), // Já vem hasheada
+            $u->getSenha(),
             $u->getTelefone(),
             $u->getCpf(),
             $u->getCidade(),
@@ -98,7 +94,6 @@ class UsuarioDAO
 
     public function readById($id)
     {
-        require_once __DIR__ . '/config.php';
         $sql = "SELECT * FROM usuarios WHERE id_usuario=?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$id]);
@@ -108,7 +103,7 @@ class UsuarioDAO
                 $row['id_usuario'],
                 $row['nome_usuario'],
                 $row['email_usuario'],
-                null, // senha não retorna
+                null,
                 $row['telefone_usuario'],
                 $row['cpf_usuario'],
                 $row['tipo_usuario'] ?? TIPO_USUARIO_ALUNO,
@@ -124,7 +119,6 @@ class UsuarioDAO
 
     public function update(Usuario $u)
     {
-        // Se a senha foi fornecida e não está vazia, atualiza. Caso contrário, mantém a atual
         if ($u->getSenha() && !empty(trim($u->getSenha()))) {
             $sql = "UPDATE usuarios SET nome_usuario=?, email_usuario=?, telefone_usuario=?, cpf_usuario=?, tipo_usuario=?, cidade_usuario=?, estado_usuario=?, bairro_usuario=?, rua_usuario=?, senha_usuario_hash=? WHERE id_usuario=?";
             $stmt = $this->conn->prepare($sql);
@@ -142,7 +136,6 @@ class UsuarioDAO
                 $u->getId()
             ]);
         } else {
-            // Atualiza sem alterar a senha
             $sql = "UPDATE usuarios SET nome_usuario=?, email_usuario=?, telefone_usuario=?, cpf_usuario=?, tipo_usuario=?, cidade_usuario=?, estado_usuario=?, bairro_usuario=?, rua_usuario=? WHERE id_usuario=?";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([

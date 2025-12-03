@@ -1,7 +1,4 @@
 <?php
-/**
- * Controller Mensagem - TechFit
- */
 
 session_start();
 require_once __DIR__ . "/../Model/config.php";
@@ -46,7 +43,11 @@ class MensagemController
             $idRemetente = $_SESSION['usuario']['id'];
 
             if ($tipo === 'turma' && $idTurma) {
-                // Envia para todos da turma
+                if (!Auth::isAdmin()) {
+                    $_SESSION['erro'] = 'Apenas administradores podem enviar mensagens para turmas!';
+                    header('Location: ' . getViewUrl('mensagens.php'));
+                    exit;
+                }
                 $matriculados = $this->usuarioTurmaDAO->readByTurma($idTurma);
                 foreach ($matriculados as $matricula) {
                     $mensagem = new Mensagem(
@@ -64,7 +65,12 @@ class MensagemController
                 }
                 $_SESSION['sucesso'] = 'Mensagem enviada para todos os alunos da turma!';
             } elseif ($idDestinatario) {
-                // Mensagem individual - redireciona para o chat
+                $conversaExistente = $this->mensagemDAO->readConversa($idRemetente, $idDestinatario);
+                if (!empty($conversaExistente)) {
+                    $primeiraMsg = reset($conversaExistente);
+                    $assunto = $primeiraMsg->getAssunto();
+                }
+                
                 $mensagem = new Mensagem(
                     null,
                     $idRemetente,
@@ -77,8 +83,7 @@ class MensagemController
                 );
                 $this->mensagemDAO->cadastrar($mensagem);
                 $_SESSION['sucesso'] = 'Mensagem enviada com sucesso!';
-                // Redireciona para o chat com o destinatário
-                header('Location: ' . getViewUrl('chat.php') . '?usuario=' . $idDestinatario);
+                header('Location: ' . getViewUrl('mensagens.php') . '?usuario=' . $idDestinatario);
                 exit;
             } else {
                 $_SESSION['erro'] = 'Selecione um destinatário ou turma!';
@@ -122,16 +127,25 @@ class MensagemController
 
         $idDestinatario = intval($_POST['id_destinatario'] ?? 0);
         $conteudo = trim($_POST['conteudo'] ?? '');
-        $assunto = trim($_POST['assunto'] ?? 'Nova mensagem');
+        $assunto = trim($_POST['assunto'] ?? 'Nova conversa');
 
         if (!$idDestinatario || !$conteudo) {
             $_SESSION['erro'] = 'Preencha a mensagem!';
-            header('Location: ' . getViewUrl('chat.php') . '?usuario=' . $idDestinatario);
+            header('Location: ' . getViewUrl('mensagens.php') . '?usuario=' . $idDestinatario);
             exit;
         }
 
         try {
             $idRemetente = $_SESSION['usuario']['id'];
+            
+            $conversaExistente = $this->mensagemDAO->readConversa($idRemetente, $idDestinatario);
+            if (empty($conversaExistente) && ($assunto == 'Nova mensagem' || $assunto == 'Nova conversa')) {
+                $assunto = 'Nova conversa';
+            } elseif (!empty($conversaExistente)) {
+                $primeiraMsg = reset($conversaExistente);
+                $assunto = $primeiraMsg->getAssunto();
+            }
+            
             $mensagem = new Mensagem(
                 null,
                 $idRemetente,
@@ -144,7 +158,6 @@ class MensagemController
             );
             $this->mensagemDAO->cadastrar($mensagem);
             
-            // Marca mensagens anteriores como lidas
             $conversa = $this->mensagemDAO->readConversa($idRemetente, $idDestinatario);
             foreach ($conversa as $msg) {
                 if ($msg->getIdDestinatario() == $idRemetente && !$msg->getLida()) {
@@ -152,12 +165,12 @@ class MensagemController
                 }
             }
 
-            header('Location: ' . getViewUrl('chat.php') . '?usuario=' . $idDestinatario);
+            header('Location: ' . getViewUrl('mensagens.php') . '?usuario=' . $idDestinatario);
             exit;
         } catch (Exception $e) {
             error_log("Erro ao responder mensagem: " . $e->getMessage());
             $_SESSION['erro'] = 'Erro ao enviar mensagem. Tente novamente.';
-            header('Location: ' . getViewUrl('chat.php') . '?usuario=' . $idDestinatario);
+            header('Location: ' . getViewUrl('mensagens.php') . '?usuario=' . $idDestinatario);
             exit;
         }
     }

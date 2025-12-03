@@ -1,7 +1,4 @@
 <?php
-/**
- * Controller Treino - TechFit
- */
 
 session_start();
 require_once __DIR__ . "/../Model/config.php";
@@ -38,7 +35,6 @@ class TreinoController
             exit;
         }
 
-        // Verifica se o usuário existe
         $usuario = $this->usuarioDAO->readById($idUsuario);
         if (!$usuario) {
             $_SESSION['erro'] = 'Usuário não encontrado!';
@@ -55,7 +51,7 @@ class TreinoController
             $_SESSION['erro'] = 'Erro ao cadastrar treino. Tente novamente.';
         }
 
-        header('Location: ../View/dashboard_admin.php');
+        header('Location: ' . getViewUrl('dashboard_admin.php'));
         exit;
     }
 
@@ -97,7 +93,7 @@ class TreinoController
             $_SESSION['erro'] = 'Erro ao atualizar treino. Tente novamente.';
         }
 
-        header('Location: ../View/dashboard_admin.php');
+        header('Location: ' . getViewUrl('dashboard_admin.php'));
         exit;
     }
 
@@ -121,7 +117,7 @@ class TreinoController
             $_SESSION['erro'] = 'Erro ao deletar treino. Tente novamente.';
         }
 
-        header('Location: ../View/dashboard_admin.php');
+        header('Location: ' . getViewUrl('dashboard_admin.php'));
         exit;
     }
 }

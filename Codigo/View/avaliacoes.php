@@ -48,6 +48,8 @@ if ($ultimaAvaliacao) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechFit - Avaliações Físicas</title>
+    <link rel="icon" type="image/svg+xml" href="../Public/favicon.svg">
+    <link rel="alternate icon" href="../Public/favicon.svg">
     <link rel="stylesheet" href="../Public/css/nav.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -81,6 +83,10 @@ if ($ultimaAvaliacao) {
             <a class="btn-nav-centro" href="cursos.php">Cursos</a>
             <?php if ($tipoUsuario == TIPO_USUARIO_ALUNO): ?>
                 <a class="btn-nav-centro btn-ativo" href="dashboard.php">Área do Aluno</a>
+            <?php elseif ($tipoUsuario == TIPO_USUARIO_ADMIN): ?>
+                <a class="btn-nav-centro" href="dashboard_admin.php">Dashboard Admin</a>
+            <?php elseif ($tipoUsuario == TIPO_USUARIO_INSTRUTOR): ?>
+                <a class="btn-nav-centro" href="dashboard_instrutor.php">Dashboard Instrutor</a>
             <?php endif; ?>
         </section>
 
@@ -93,7 +99,12 @@ if ($ultimaAvaliacao) {
                     <a href="#" class="usuario-dropdown-item">
                         <i class="fas fa-user me-2"></i><?php echo htmlspecialchars($usuario['nome']); ?>
                     </a>
-                    <a href="dashboard.php" class="usuario-dropdown-item">Área do Aluno</a>
+                    <a href="mensagens.php" class="usuario-dropdown-item">
+                        <i class="fas fa-envelope me-2"></i>Mensagens
+                    </a>
+                    <a href="perfil.php" class="usuario-dropdown-item">
+                        <i class="fas fa-cog me-2"></i>Configurações
+                    </a>
                     <a href="../../index.php?action=logout" class="usuario-dropdown-item logout">
                         <i class="fas fa-sign-out-alt me-2"></i>Sair
                     </a>

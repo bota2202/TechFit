@@ -9,6 +9,8 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechFit - Cadastro</title>
+    <link rel="icon" type="image/svg+xml" href="../Public/favicon.svg">
+    <link rel="alternate icon" href="../Public/favicon.svg">
     <link rel="stylesheet" href="../Public/css/cadastro.css">
 </head>
 <body>
@@ -68,10 +70,33 @@ if (session_status() === PHP_SESSION_NONE) {
                     <label for="estado-sign">Estado</label>
                     <select name="estado" id="estado-sign" class="campo-sign" required>
                         <option value="">Selecione</option>
-                        <option value="SP">SP</option>
-                        <option value="RJ">RJ</option>
-                        <option value="MG">MG</option>
-                        <option value="PR">PR</option>
+                        <option value="AC">Acre (AC)</option>
+                        <option value="AL">Alagoas (AL)</option>
+                        <option value="AP">Amapá (AP)</option>
+                        <option value="AM">Amazonas (AM)</option>
+                        <option value="BA">Bahia (BA)</option>
+                        <option value="CE">Ceará (CE)</option>
+                        <option value="DF">Distrito Federal (DF)</option>
+                        <option value="ES">Espírito Santo (ES)</option>
+                        <option value="GO">Goiás (GO)</option>
+                        <option value="MA">Maranhão (MA)</option>
+                        <option value="MT">Mato Grosso (MT)</option>
+                        <option value="MS">Mato Grosso do Sul (MS)</option>
+                        <option value="MG">Minas Gerais (MG)</option>
+                        <option value="PA">Pará (PA)</option>
+                        <option value="PB">Paraíba (PB)</option>
+                        <option value="PR">Paraná (PR)</option>
+                        <option value="PE">Pernambuco (PE)</option>
+                        <option value="PI">Piauí (PI)</option>
+                        <option value="RJ">Rio de Janeiro (RJ)</option>
+                        <option value="RN">Rio Grande do Norte (RN)</option>
+                        <option value="RS">Rio Grande do Sul (RS)</option>
+                        <option value="RO">Rondônia (RO)</option>
+                        <option value="RR">Roraima (RR)</option>
+                        <option value="SC">Santa Catarina (SC)</option>
+                        <option value="SP">São Paulo (SP)</option>
+                        <option value="SE">Sergipe (SE)</option>
+                        <option value="TO">Tocantins (TO)</option>
                     </select>
                     <div class="error-message" id="error-estado"></div>
                 </div>
@@ -127,11 +152,11 @@ if (session_status() === PHP_SESSION_NONE) {
 
         <?php
         if (isset($_SESSION['erro'])) {
-            echo '<div class="alert alert-danger" style="margin-top: 20px; padding: 12px; background: #f8d7da; color: #721c24; border-radius: 8px;">' . htmlspecialchars($_SESSION['erro']) . '</div>';
+            echo '<div class="alert alert-danger" id="alert-erro" style="margin-top: 20px; padding: 12px; background: #f8d7da; color: #721c24; border-radius: 8px;">' . htmlspecialchars($_SESSION['erro']) . '</div>';
             unset($_SESSION['erro']);
         }
         if (isset($_SESSION['sucesso'])) {
-            echo '<div class="alert alert-success" style="margin-top: 20px; padding: 12px; background: #d4edda; color: #155724; border-radius: 8px;">' . htmlspecialchars($_SESSION['sucesso']) . '</div>';
+            echo '<div class="alert alert-success" id="alert-sucesso" style="margin-top: 20px; padding: 12px; background: #d4edda; color: #155724; border-radius: 8px;">' . htmlspecialchars($_SESSION['sucesso']) . '</div>';
             unset($_SESSION['sucesso']);
         }
         ?>
@@ -144,6 +169,33 @@ if (session_status() === PHP_SESSION_NONE) {
 </div>
 
 <script src="../Public/js/cadastro.js"></script>
+<script>
+    // Faz as mensagens de sucesso/erro desaparecerem após 7 segundos
+    document.addEventListener('DOMContentLoaded', function() {
+        const alertErro = document.getElementById('alert-erro');
+        const alertSucesso = document.getElementById('alert-sucesso');
+        
+        if (alertErro) {
+            setTimeout(function() {
+                alertErro.style.transition = 'opacity 0.5s ease';
+                alertErro.style.opacity = '0';
+                setTimeout(function() {
+                    alertErro.remove();
+                }, 500);
+            }, 7000);
+        }
+        
+        if (alertSucesso) {
+            setTimeout(function() {
+                alertSucesso.style.transition = 'opacity 0.5s ease';
+                alertSucesso.style.opacity = '0';
+                setTimeout(function() {
+                    alertSucesso.remove();
+                }, 500);
+            }, 7000);
+        }
+    });
+</script>
 </body>
 </html>
 

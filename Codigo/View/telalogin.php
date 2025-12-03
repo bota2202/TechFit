@@ -9,6 +9,8 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechFit - Login</title>
+    <link rel="icon" type="image/svg+xml" href="../Public/favicon.svg">
+    <link rel="alternate icon" href="../Public/favicon.svg">
     <link rel="stylesheet" href="../Public/css/telalogin.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -48,11 +50,11 @@ if (session_status() === PHP_SESSION_NONE) {
         
         <?php
         if (isset($_SESSION['erro'])) {
-            echo '<div class="alert alert-danger" role="alert">' . htmlspecialchars($_SESSION['erro']) . '</div>';
+            echo '<div class="alert alert-danger" id="alert-erro" role="alert">' . htmlspecialchars($_SESSION['erro']) . '</div>';
             unset($_SESSION['erro']);
         }
         if (isset($_SESSION['sucesso'])) {
-            echo '<div class="alert alert-success" role="alert">' . htmlspecialchars($_SESSION['sucesso']) . '</div>';
+            echo '<div class="alert alert-success" id="alert-sucesso" role="alert">' . htmlspecialchars($_SESSION['sucesso']) . '</div>';
             unset($_SESSION['sucesso']);
         }
         ?>
@@ -86,6 +88,33 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Faz as mensagens de sucesso/erro desaparecerem após 7 segundos
+        document.addEventListener('DOMContentLoaded', function() {
+            const alertErro = document.getElementById('alert-erro');
+            const alertSucesso = document.getElementById('alert-sucesso');
+            
+            if (alertErro) {
+                setTimeout(function() {
+                    alertErro.style.transition = 'opacity 0.5s ease';
+                    alertErro.style.opacity = '0';
+                    setTimeout(function() {
+                        alertErro.remove();
+                    }, 500);
+                }, 7000);
+            }
+            
+            if (alertSucesso) {
+                setTimeout(function() {
+                    alertSucesso.style.transition = 'opacity 0.5s ease';
+                    alertSucesso.style.opacity = '0';
+                    setTimeout(function() {
+                        alertSucesso.remove();
+                    }, 500);
+                }, 7000);
+            }
+        });
+    </script>
 </body>
 </html>
 

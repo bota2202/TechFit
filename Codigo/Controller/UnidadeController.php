@@ -26,7 +26,7 @@ class UnidadeController
 
         if (!$estado || !$cidade || !$bairro || !$rua || !$numero) {
             $_SESSION['erro'] = 'Preencha todos os campos!';
-            header('Location: ' . getViewUrl('unidades.php'));
+            header('Location: ' . getViewUrl('dashboard_admin.php'));
             exit;
         }
 
@@ -34,7 +34,7 @@ class UnidadeController
             $unidade = new Unidade(null, $estado, $cidade, $bairro, $rua, $numero);
             $this->dao->cadastrar($unidade);
             $_SESSION['sucesso'] = 'Unidade cadastrada com sucesso!';
-            header('Location: ' . getViewUrl('unidades.php'));
+            header('Location: ' . getViewUrl('dashboard_admin.php'));
             exit;
         } catch (PDOException $e) {
             error_log("Erro ao cadastrar unidade: " . $e->getMessage());

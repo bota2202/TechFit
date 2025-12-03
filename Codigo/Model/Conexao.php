@@ -1,13 +1,10 @@
-<?php 
+<?php
 
 include_once __DIR__ . "/config.php";
 
 class Conexao {
     private static $instance = null;
 
-    /**
-     * Cria o banco de dados se não existir
-     */
     public static function criarBanco() {
         try {
             $pdo = new PDO(
@@ -30,7 +27,6 @@ class Conexao {
     public static function getInstance() {
         if (self::$instance === null) {
             try {
-                // Tenta criar o banco se não existir
                 self::criarBanco();
                 
                 self::$instance = new PDO(
@@ -52,5 +48,3 @@ class Conexao {
         return self::$instance;
     }
 }
-
-?>

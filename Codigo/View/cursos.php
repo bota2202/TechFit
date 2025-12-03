@@ -14,6 +14,8 @@ $tipoUsuario = $usuarioLogado ? ($_SESSION['usuario']['tipo'] ?? TIPO_USUARIO_AL
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechFit - Cursos</title>
+    <link rel="icon" type="image/svg+xml" href="../Public/favicon.svg">
+    <link rel="alternate icon" href="../Public/favicon.svg">
     <link rel="stylesheet" href="../Public/css/cursos.css">
     <link rel="stylesheet" href="../Public/css/nav.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,6 +37,8 @@ $tipoUsuario = $usuarioLogado ? ($_SESSION['usuario']['tipo'] ?? TIPO_USUARIO_AL
             <a class="btn-nav-centro btn-ativo" href="cursos.php">Cursos</a>
             <?php if ($usuarioLogado && $tipoUsuario == TIPO_USUARIO_ALUNO): ?>
                 <a class="btn-nav-centro" href="dashboard.php">Área do Aluno</a>
+            <?php elseif ($usuarioLogado && $tipoUsuario == TIPO_USUARIO_ADMIN): ?>
+                <a class="btn-nav-centro" href="dashboard_admin.php">Dashboard Admin</a>
             <?php endif; ?>
         </section>
 
@@ -48,11 +52,12 @@ $tipoUsuario = $usuarioLogado ? ($_SESSION['usuario']['tipo'] ?? TIPO_USUARIO_AL
                         <a href="#" class="usuario-dropdown-item">
                             <i class="fas fa-user me-2"></i><?php echo htmlspecialchars($_SESSION['usuario']['nome']); ?>
                         </a>
-                        <?php if ($tipoUsuario == TIPO_USUARIO_ALUNO): ?>
-                            <a href="dashboard.php" class="usuario-dropdown-item">Área do Aluno</a>
-                        <?php elseif ($tipoUsuario == TIPO_USUARIO_ADMIN): ?>
-                            <a href="dashboard_admin.php" class="usuario-dropdown-item">Dashboard Admin</a>
-                        <?php endif; ?>
+                        <a href="mensagens.php" class="usuario-dropdown-item">
+                            <i class="fas fa-envelope me-2"></i>Mensagens
+                        </a>
+                        <a href="perfil.php" class="usuario-dropdown-item">
+                            <i class="fas fa-cog me-2"></i>Configurações
+                        </a>
                         <a href="../../index.php?action=logout" class="usuario-dropdown-item logout">
                             <i class="fas fa-sign-out-alt me-2"></i>Sair
                         </a>
@@ -126,6 +131,50 @@ $tipoUsuario = $usuarioLogado ? ($_SESSION['usuario']['tipo'] ?? TIPO_USUARIO_AL
         </div>
     </div>
 
+    <div class="modal-overlay" id="modal-confirmacao" style="display: none;">
+        <div class="modal-container" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 class="modal-titulo" id="modal-confirmacao-titulo">Confirmar</h2>
+                <button class="modal-fechar" onclick="fecharModalConfirmacao()">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-confirmacao-texto"></p>
+            </div>
+            <div class="modal-footer" style="padding: 15px; border-top: 1px solid #ddd; display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="fecharModalConfirmacao()" style="padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
+                <button class="btn btn-primary" id="modal-confirmacao-confirmar" style="padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer; background: #11998e; color: white;">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let confirmacaoCallback = null;
+        
+        function mostrarConfirmacao(titulo, texto, callback) {
+            document.getElementById('modal-confirmacao-titulo').textContent = titulo;
+            document.getElementById('modal-confirmacao-texto').textContent = texto;
+            confirmacaoCallback = callback;
+            document.getElementById('modal-confirmacao').style.display = 'flex';
+        }
+        
+        function fecharModalConfirmacao() {
+            document.getElementById('modal-confirmacao').style.display = 'none';
+            confirmacaoCallback = null;
+        }
+        
+        document.getElementById('modal-confirmacao-confirmar').addEventListener('click', function() {
+            if (confirmacaoCallback) {
+                confirmacaoCallback();
+                fecharModalConfirmacao();
+            }
+        });
+        
+        document.getElementById('modal-confirmacao').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModalConfirmacao();
+            }
+        });
+    </script>
     <script src="../Public/js/cursos.js"></script>
 </body>
 </html>

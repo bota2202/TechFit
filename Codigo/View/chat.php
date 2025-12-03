@@ -1,7 +1,4 @@
 <?php
-/**
- * Chat/Conversa - TechFit
- */
 
 session_start();
 
@@ -19,7 +16,6 @@ $tipoUsuario = $usuario['tipo'] ?? TIPO_USUARIO_ALUNO;
 $mensagemDAO = new MensagemDAO();
 $usuarioDAO = new UsuarioDAO();
 
-// ID do outro usuário na conversa
 $idOutroUsuario = intval($_GET['usuario'] ?? 0);
 
 if (!$idOutroUsuario) {
@@ -28,7 +24,6 @@ if (!$idOutroUsuario) {
     exit;
 }
 
-// Busca dados do outro usuário
 $outroUsuario = $usuarioDAO->readById($idOutroUsuario);
 if (!$outroUsuario) {
     $_SESSION['erro'] = 'Usuário não encontrado';
@@ -36,18 +31,16 @@ if (!$outroUsuario) {
     exit;
 }
 
-// Busca conversa entre os dois usuários
 $conversa = $mensagemDAO->readConversa($usuario['id'], $idOutroUsuario);
 
-// Marca mensagens recebidas como lidas
 foreach ($conversa as $msg) {
     if ($msg->getIdDestinatario() == $usuario['id'] && !$msg->getLida()) {
         $mensagemDAO->marcarComoLida($msg->getId());
     }
 }
 
-// Busca lista de conversas para sidebar
 $conversas = $mensagemDAO->readConversas($usuario['id']);
+$tituloConversa = $mensagemDAO->getTituloConversa($usuario['id'], $idOutroUsuario);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -55,6 +48,8 @@ $conversas = $mensagemDAO->readConversas($usuario['id']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechFit - Chat</title>
+    <link rel="icon" type="image/svg+xml" href="../Public/favicon.svg">
+    <link rel="alternate icon" href="../Public/favicon.svg">
     <link rel="stylesheet" href="../Public/css/nav.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -179,6 +174,8 @@ $conversas = $mensagemDAO->readConversas($usuario['id']);
             <a class="btn-nav-centro" href="cursos.php">Cursos</a>
             <?php if ($tipoUsuario == TIPO_USUARIO_ALUNO): ?>
                 <a class="btn-nav-centro btn-ativo" href="dashboard.php">Área do Aluno</a>
+            <?php elseif ($tipoUsuario == TIPO_USUARIO_ADMIN): ?>
+                <a class="btn-nav-centro" href="dashboard_admin.php">Dashboard Admin</a>
             <?php endif; ?>
         </section>
 
@@ -191,12 +188,13 @@ $conversas = $mensagemDAO->readConversas($usuario['id']);
                     <a href="#" class="usuario-dropdown-item">
                         <i class="fas fa-user me-2"></i><?php echo htmlspecialchars($usuario['nome']); ?>
                     </a>
-                    <?php if ($tipoUsuario == TIPO_USUARIO_ALUNO): ?>
-                        <a href="dashboard.php" class="usuario-dropdown-item">Área do Aluno</a>
-                    <?php elseif ($tipoUsuario == TIPO_USUARIO_ADMIN): ?>
-                        <a href="dashboard_admin.php" class="usuario-dropdown-item">Dashboard Admin</a>
-                    <?php endif; ?>
-                    <a href="../../index.php?action=logout" class="usuario-dropdown-item logout">
+                    <a href="mensagens.php" class="usuario-dropdown-item">
+                        <i class="fas fa-envelope me-2"></i>Mensagens
+                    </a>
+                    <a href="perfil.php" class="usuario-dropdown-item">
+                        <i class="fas fa-cog me-2"></i>Configurações
+                    </a>
+                    <a href="<?php echo getActionUrl('logout'); ?>" class="usuario-dropdown-item logout">
                         <i class="fas fa-sign-out-alt me-2"></i>Sair
                     </a>
                 </div>
@@ -226,6 +224,9 @@ $conversas = $mensagemDAO->readConversas($usuario['id']);
                             </div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold"><?php echo htmlspecialchars($outro->getNome()); ?></div>
+                                <div class="text-muted" style="font-size: 0.85rem;">
+                                    <?php echo htmlspecialchars($conv['titulo_conversa'] ?? 'Nova conversa'); ?>
+                                </div>
                                 <small class="text-muted">
                                     <?php echo date('d/m/Y H:i', strtotime($conv['ultima_mensagem'])); ?>
                                 </small>
@@ -249,7 +250,7 @@ $conversas = $mensagemDAO->readConversas($usuario['id']);
                     </div>
                     <div>
                         <h5 class="mb-0"><?php echo htmlspecialchars($outroUsuario->getNome()); ?></h5>
-                        <small>Conversa</small>
+                        <small><?php echo htmlspecialchars($tituloConversa); ?></small>
                     </div>
                 </div>
             </div>
@@ -293,9 +294,9 @@ $conversas = $mensagemDAO->readConversas($usuario['id']);
                     unset($_SESSION['sucesso']);
                 }
                 ?>
-                <form action="../../index.php?action=responder-mensagem" method="POST" id="chatForm">
+                <form action="<?php echo getActionUrl('responder-mensagem'); ?>" method="POST" id="chatForm">
                     <input type="hidden" name="id_destinatario" value="<?php echo $idOutroUsuario; ?>">
-                    <input type="hidden" name="assunto" value="Nova mensagem">
+                    <input type="hidden" name="assunto" value="<?php echo htmlspecialchars($tituloConversa); ?>">
                     <div class="input-group">
                         <textarea name="conteudo" class="form-control" rows="2" 
                                   placeholder="Digite sua mensagem..." required 
@@ -310,22 +311,57 @@ $conversas = $mensagemDAO->readConversas($usuario['id']);
     </div>
 
     <script>
-        // Auto-scroll para a última mensagem
         const chatMessages = document.getElementById('chatMessages');
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        const mensagemInput = document.getElementById('mensagemInput');
+        let isTyping = false;
+        let refreshInterval;
 
-        // Auto-refresh a cada 3 segundos
-        setInterval(function() {
-            location.reload();
-        }, 3000);
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
 
-        // Enviar com Enter (Shift+Enter para nova linha)
-        document.getElementById('mensagemInput').addEventListener('keydown', function(e) {
+        scrollToBottom();
+
+        function startAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+            refreshInterval = setInterval(function() {
+                if (!isTyping && document.activeElement !== mensagemInput) {
+                    location.reload();
+                }
+            }, 5000);
+        }
+
+        mensagemInput.addEventListener('focus', function() {
+            isTyping = true;
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+
+        mensagemInput.addEventListener('blur', function() {
+            isTyping = false;
+            startAutoRefresh();
+        });
+
+        mensagemInput.addEventListener('input', function() {
+            isTyping = true;
+            clearTimeout(window.typingTimeout);
+            window.typingTimeout = setTimeout(function() {
+                isTyping = false;
+            }, 2000);
+        });
+
+        mensagemInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
+                isTyping = false;
                 document.getElementById('chatForm').submit();
             }
         });
+
+        startAutoRefresh();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>

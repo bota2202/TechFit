@@ -1,30 +1,17 @@
 <?php
-/**
- * Classe de Autenticação - TechFit
- * Gerencia autenticação e autorização de usuários
- */
 
 class Auth
 {
-    /**
-     * Verifica se o usuário está autenticado
-     */
     public static function isAuthenticated()
     {
         return isset($_SESSION['usuario']) && !empty($_SESSION['usuario']);
     }
 
-    /**
-     * Obtém o usuário atual da sessão
-     */
     public static function getUser()
     {
         return $_SESSION['usuario'] ?? null;
     }
 
-    /**
-     * Verifica se o usuário é administrador
-     */
     public static function isAdmin()
     {
         if (!self::isAuthenticated()) {
@@ -33,9 +20,6 @@ class Auth
         return ($_SESSION['usuario']['tipo'] ?? TIPO_USUARIO_ALUNO) == TIPO_USUARIO_ADMIN;
     }
 
-    /**
-     * Verifica se o usuário é instrutor
-     */
     public static function isInstrutor()
     {
         if (!self::isAuthenticated()) {
@@ -44,9 +28,6 @@ class Auth
         return ($_SESSION['usuario']['tipo'] ?? TIPO_USUARIO_ALUNO) == TIPO_USUARIO_INSTRUTOR;
     }
 
-    /**
-     * Verifica se o usuário é aluno
-     */
     public static function isAluno()
     {
         if (!self::isAuthenticated()) {
@@ -55,9 +36,6 @@ class Auth
         return ($_SESSION['usuario']['tipo'] ?? TIPO_USUARIO_ALUNO) == TIPO_USUARIO_ALUNO;
     }
 
-    /**
-     * Requer autenticação - redireciona se não estiver logado
-     */
     public static function requireAuth()
     {
         if (!self::isAuthenticated()) {
@@ -68,9 +46,6 @@ class Auth
         }
     }
 
-    /**
-     * Requer que o usuário seja admin
-     */
     public static function requireAdmin()
     {
         self::requireAuth();
@@ -87,9 +62,6 @@ class Auth
         }
     }
 
-    /**
-     * Faz logout do usuário
-     */
     public static function logout()
     {
         session_destroy();

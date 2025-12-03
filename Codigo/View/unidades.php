@@ -14,6 +14,8 @@ $tipoUsuario = $usuarioLogado ? ($_SESSION['usuario']['tipo'] ?? TIPO_USUARIO_AL
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechFit - Unidades</title>
+    <link rel="icon" type="image/svg+xml" href="../Public/favicon.svg">
+    <link rel="alternate icon" href="../Public/favicon.svg">
     <link rel="stylesheet" href="../Public/css/unidades.css">
     <link rel="stylesheet" href="../Public/css/nav.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,6 +37,8 @@ $tipoUsuario = $usuarioLogado ? ($_SESSION['usuario']['tipo'] ?? TIPO_USUARIO_AL
             <a class="btn-nav-centro" href="cursos.php">Cursos</a>
             <?php if ($usuarioLogado && $tipoUsuario == TIPO_USUARIO_ALUNO): ?>
                 <a class="btn-nav-centro" href="dashboard.php">Área do Aluno</a>
+            <?php elseif ($usuarioLogado && $tipoUsuario == TIPO_USUARIO_ADMIN): ?>
+                <a class="btn-nav-centro" href="dashboard_admin.php">Dashboard Admin</a>
             <?php endif; ?>
         </section>
 
@@ -48,11 +52,12 @@ $tipoUsuario = $usuarioLogado ? ($_SESSION['usuario']['tipo'] ?? TIPO_USUARIO_AL
                         <a href="#" class="usuario-dropdown-item">
                             <i class="fas fa-user me-2"></i><?php echo htmlspecialchars($_SESSION['usuario']['nome']); ?>
                         </a>
-                        <?php if ($tipoUsuario == TIPO_USUARIO_ALUNO): ?>
-                            <a href="dashboard.php" class="usuario-dropdown-item">Área do Aluno</a>
-                        <?php elseif ($tipoUsuario == TIPO_USUARIO_ADMIN): ?>
-                            <a href="dashboard_admin.php" class="usuario-dropdown-item">Dashboard Admin</a>
-                        <?php endif; ?>
+                            <a href="mensagens.php" class="usuario-dropdown-item">
+                                <i class="fas fa-envelope me-2"></i>Mensagens
+                            </a>
+                            <a href="perfil.php" class="usuario-dropdown-item">
+                                <i class="fas fa-cog me-2"></i>Configurações
+                            </a>
                         <a href="../../index.php?action=logout" class="usuario-dropdown-item logout">
                             <i class="fas fa-sign-out-alt me-2"></i>Sair
                         </a>

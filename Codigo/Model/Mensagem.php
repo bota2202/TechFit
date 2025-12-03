@@ -1,7 +1,4 @@
 <?php
-/**
- * Model Mensagem - TechFit
- */
 
 class Mensagem
 {
@@ -12,8 +9,8 @@ class Mensagem
     private $conteudo;
     private $dataEnvio;
     private $lida;
-    private $tipo; // 'geral', 'turma', 'personalizada'
-    private $idTurma; // Para mensagens de turma
+    private $tipo;
+    private $idTurma;
 
     public function __construct($id, $idRemetente, $idDestinatario, $assunto, $conteudo, 
                                 $dataEnvio = null, $lida = false, $tipo = 'geral', $idTurma = null)

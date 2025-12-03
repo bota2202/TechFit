@@ -119,5 +119,36 @@ class UsuarioPlanoDAO
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$idPlano, $idUsuario]);
     }
+
+    public function temPlanoAtivo($idUsuario)
+    {
+        $sql = "SELECT * FROM Usuario_Plano 
+                WHERE id_usuario=? 
+                AND (data_fim_plano IS NULL OR data_fim_plano > NOW())";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$idUsuario]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) !== false;
+    }
+
+    public function getPlanoAtivo($idUsuario)
+    {
+        $sql = "SELECT up.*, p.preco_plano, p.descricao_plano 
+                FROM Usuario_Plano up
+                INNER JOIN Planos p ON up.id_plano = p.id_plano
+                WHERE up.id_usuario=? 
+                AND (up.data_fim_plano IS NULL OR up.data_fim_plano > NOW())
+                ORDER BY up.data_inicio_plano DESC
+                LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$idUsuario]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function cancelarPlanoAtivo($idUsuario)
+    {
+        $sql = "UPDATE Usuario_Plano SET data_fim_plano = NOW() WHERE id_usuario = ? AND (data_fim_plano IS NULL OR data_fim_plano > NOW())";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$idUsuario]);
+    }
 }
 

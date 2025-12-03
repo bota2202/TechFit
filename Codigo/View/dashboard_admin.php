@@ -1,8 +1,4 @@
 <?php
-/**
- * Dashboard do Admin - TechFit
- * Área restrita para administradores com abas e CRUDs completos
- */
 
 session_start();
 
@@ -21,7 +17,6 @@ require_once __DIR__ . '/../Model/AvaliacaoFisicaDAO.php';
 require_once __DIR__ . '/../Model/MensagemDAO.php';
 require_once __DIR__ . '/../Model/helpers.php';
 
-// Verifica se o usuário é admin
 Auth::requireAdmin();
 
 $usuario = $_SESSION['usuario'];
@@ -36,7 +31,6 @@ $usuarioTurmaDAO = new UsuarioTurmaDAO();
 $avaliacaoDAO = new AvaliacaoFisicaDAO();
 $mensagemDAO = new MensagemDAO();
 
-// Busca todos os dados
 $usuarios = $usuarioDAO->readAll();
 $alunos = [];
 $instrutores = [];
@@ -65,6 +59,8 @@ $totalUnidades = count($unidades);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechFit - Dashboard Admin</title>
+    <link rel="icon" type="image/svg+xml" href="../Public/favicon.svg">
+    <link rel="alternate icon" href="../Public/favicon.svg">
     <link rel="stylesheet" href="../Public/css/nav.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -136,6 +132,21 @@ $totalUnidades = count($unidades);
         .table-actions {
             white-space: nowrap;
         }
+        .table-actions .btn {
+            margin-right: 5px;
+        }
+        .table-actions .btn:last-child {
+            margin-right: 0;
+        }
+        .modal-lg {
+            max-width: 800px;
+        }
+        .modal-body .row {
+            margin-bottom: 0;
+        }
+        .modal-body .mb-3 {
+            margin-bottom: 1rem !important;
+        }
     </style>
 </head>
 <body>
@@ -149,6 +160,7 @@ $totalUnidades = count($unidades);
             <a class="btn-nav-centro" href="planos.php">Planos</a>
             <a class="btn-nav-centro" href="unidades.php">Unidades</a>
             <a class="btn-nav-centro" href="cursos.php">Cursos</a>
+            <a class="btn-nav-centro btn-ativo" href="dashboard_admin.php">Dashboard Admin</a>
         </section>
 
         <section class="nav-direita">
@@ -160,8 +172,13 @@ $totalUnidades = count($unidades);
                     <a href="#" class="usuario-dropdown-item">
                         <i class="fas fa-user me-2"></i><?php echo htmlspecialchars($usuario['nome']); ?>
                     </a>
-                    <a href="dashboard_admin.php" class="usuario-dropdown-item">Dashboard Admin</a>
-                    <a href="../../index.php?action=logout" class="usuario-dropdown-item logout">
+                    <a href="mensagens.php" class="usuario-dropdown-item">
+                        <i class="fas fa-envelope me-2"></i>Mensagens
+                    </a>
+                    <a href="perfil.php" class="usuario-dropdown-item">
+                        <i class="fas fa-cog me-2"></i>Configurações
+                    </a>
+                    <a href="<?php echo getActionUrl('logout'); ?>" class="usuario-dropdown-item logout">
                         <i class="fas fa-sign-out-alt me-2"></i>Sair
                     </a>
                 </div>
@@ -240,8 +257,8 @@ $totalUnidades = count($unidades);
                 </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="alunos-tab" data-bs-toggle="tab" data-bs-target="#alunos" type="button" role="tab">
-                    <i class="fas fa-user-graduate me-2"></i>Alunos
+                <button class="nav-link" id="usuarios-tab" data-bs-toggle="tab" data-bs-target="#usuarios" type="button" role="tab">
+                    <i class="fas fa-users me-2"></i>Usuários
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -291,9 +308,9 @@ $totalUnidades = count($unidades);
                                         <button class="btn btn-sm btn-warning" onclick="editarUnidade(<?php echo $unidade->getId(); ?>)">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <form action="../../index.php?action=unidade-deletar" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar esta unidade?');">
+                                        <form action="<?php echo getActionUrl('unidade-deletar'); ?>" method="POST" style="display:inline;" class="form-deletar" data-tipo="unidade" data-nome="<?php echo htmlspecialchars($unidade->getBairro()); ?>">
                                             <input type="hidden" name="id" value="<?php echo $unidade->getId(); ?>">
-                                            <button type="submit" class="btn btn-sm btn-danger">
+                                            <button type="button" class="btn btn-sm btn-danger btn-deletar">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -337,9 +354,9 @@ $totalUnidades = count($unidades);
                                         <button class="btn btn-sm btn-warning" onclick="editarCurso(<?php echo $curso->getId(); ?>)">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <form action="../../index.php?action=curso-deletar" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar este curso?');">
+                                        <form action="<?php echo getActionUrl('curso-deletar'); ?>" method="POST" style="display:inline;" class="form-deletar" data-tipo="curso" data-nome="<?php echo htmlspecialchars($curso->getNome()); ?>">
                                             <input type="hidden" name="id" value="<?php echo $curso->getId(); ?>">
-                                            <button type="submit" class="btn btn-sm btn-danger">
+                                            <button type="button" class="btn btn-sm btn-danger btn-deletar">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -379,9 +396,9 @@ $totalUnidades = count($unidades);
                                         <button class="btn btn-sm btn-warning" onclick="editarPlano(<?php echo $plano->getId(); ?>)">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <form action="../../index.php?action=plano-deletar" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar este plano?');">
+                                        <form action="<?php echo getActionUrl('plano-deletar'); ?>" method="POST" style="display:inline;" class="form-deletar" data-tipo="plano" data-nome="<?php echo htmlspecialchars($plano->getDescricao()); ?>">
                                             <input type="hidden" name="id" value="<?php echo $plano->getId(); ?>">
-                                            <button type="submit" class="btn btn-sm btn-danger">
+                                            <button type="button" class="btn btn-sm btn-danger btn-deletar">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -436,9 +453,9 @@ $totalUnidades = count($unidades);
                                         <button class="btn btn-sm btn-warning" onclick="editarTurma(<?php echo $turma->getId(); ?>)">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <form action="../../index.php?action=turma-deletar" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar esta turma?');">
+                                        <form action="<?php echo getActionUrl('turma-deletar'); ?>" method="POST" style="display:inline;" class="form-deletar" data-tipo="turma" data-nome="<?php echo htmlspecialchars($turma->getNome()); ?>">
                                             <input type="hidden" name="id" value="<?php echo $turma->getId(); ?>">
-                                            <button type="submit" class="btn btn-sm btn-danger">
+                                            <button type="button" class="btn btn-sm btn-danger btn-deletar">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -450,9 +467,11 @@ $totalUnidades = count($unidades);
                 </div>
             </div>
 
-            <!-- Aba Alunos -->
-            <div class="tab-pane fade" id="alunos" role="tabpanel">
-                <h4>Gerenciar Alunos</h4>
+            <!-- Aba Usuários -->
+            <div class="tab-pane fade" id="usuarios" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Gerenciar Usuários</h4>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -461,27 +480,60 @@ $totalUnidades = count($unidades);
                                 <th>Nome</th>
                                 <th>Email</th>
                                 <th>CPF</th>
+                                <th>Tipo</th>
                                 <th>Cidade</th>
+                                <th>Estado</th>
                                 <th>Telefone</th>
                                 <th class="table-actions">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($alunos as $aluno): ?>
+                            <?php foreach ($usuarios as $user): ?>
                                 <tr>
-                                    <td><?php echo $aluno->getId(); ?></td>
-                                    <td><?php echo htmlspecialchars($aluno->getNome()); ?></td>
-                                    <td><?php echo htmlspecialchars($aluno->getEmail()); ?></td>
-                                    <td><?php echo htmlspecialchars($aluno->getCpf()); ?></td>
-                                    <td><?php echo htmlspecialchars($aluno->getCidade()); ?></td>
-                                    <td><?php echo htmlspecialchars($aluno->getTelefone()); ?></td>
+                                    <td><?php echo $user->getId(); ?></td>
+                                    <td><?php echo htmlspecialchars($user->getNome()); ?></td>
+                                    <td><?php echo htmlspecialchars($user->getEmail()); ?></td>
+                                    <td><?php echo htmlspecialchars($user->getCpf()); ?></td>
+                                    <td>
+                                        <?php 
+                                        $tipo = $user->getTipo();
+                                        $tipoNome = '';
+                                        $tipoBadge = '';
+                                        if ($tipo == TIPO_USUARIO_ADMIN) {
+                                            $tipoNome = 'Admin';
+                                            $tipoBadge = 'danger';
+                                        } elseif ($tipo == TIPO_USUARIO_INSTRUTOR) {
+                                            $tipoNome = 'Instrutor';
+                                            $tipoBadge = 'warning';
+                                        } else {
+                                            $tipoNome = 'Aluno';
+                                            $tipoBadge = 'info';
+                                        }
+                                        ?>
+                                        <span class="badge bg-<?php echo $tipoBadge; ?>"><?php echo $tipoNome; ?> (<?php echo $tipo; ?>)</span>
+                                    </td>
+                                    <td><?php echo htmlspecialchars($user->getCidade()); ?></td>
+                                    <td><?php echo htmlspecialchars($user->getEstado()); ?></td>
+                                    <td><?php echo htmlspecialchars($user->getTelefone()); ?></td>
                                     <td class="table-actions">
-                                        <a href="avaliacoes.php?usuario=<?php echo $aluno->getId(); ?>" class="btn btn-sm btn-info">
+                                        <button class="btn btn-sm btn-warning btn-editar-usuario" 
+                                                data-id="<?php echo $user->getId(); ?>"
+                                                data-nome="<?php echo htmlspecialchars($user->getNome(), ENT_QUOTES); ?>"
+                                                data-email="<?php echo htmlspecialchars($user->getEmail(), ENT_QUOTES); ?>"
+                                                data-cpf="<?php echo htmlspecialchars($user->getCpf(), ENT_QUOTES); ?>"
+                                                data-telefone="<?php echo htmlspecialchars($user->getTelefone(), ENT_QUOTES); ?>"
+                                                data-tipo="<?php echo $user->getTipo(); ?>"
+                                                data-estado="<?php echo htmlspecialchars($user->getEstado() ?? '', ENT_QUOTES); ?>"
+                                                data-cidade="<?php echo htmlspecialchars($user->getCidade() ?? '', ENT_QUOTES); ?>"
+                                                data-bairro="<?php echo htmlspecialchars($user->getBairro() ?? '', ENT_QUOTES); ?>"
+                                                data-rua="<?php echo htmlspecialchars($user->getRua() ?? '', ENT_QUOTES); ?>">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </button>
+                                        <?php if ($user->getTipo() == TIPO_USUARIO_ALUNO): ?>
+                                        <a href="avaliacoes.php?usuario=<?php echo $user->getId(); ?>" class="btn btn-sm btn-info">
                                             <i class="fas fa-clipboard-list"></i> Avaliações
                                         </a>
-                                        <a href="chat.php?usuario=<?php echo $aluno->getId(); ?>" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-comments"></i> Mensagem
-                                        </a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -529,9 +581,9 @@ $totalUnidades = count($unidades);
                                         <td><?php echo htmlspecialchars(substr($item['treino']['descricao'], 0, 50)); ?>...</td>
                                         <td><?php echo date('d/m/Y', strtotime($item['treino']['data_criacao'])); ?></td>
                                         <td class="table-actions">
-                                            <form action="../../index.php?action=treino-deletar" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar este treino?');">
+                                            <form action="<?php echo getActionUrl('treino-deletar'); ?>" method="POST" style="display:inline;" class="form-deletar" data-tipo="treino" data-nome="<?php echo htmlspecialchars($treino->getNome()); ?>">
                                                 <input type="hidden" name="id" value="<?php echo $item['treino']['id']; ?>">
-                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                <button type="button" class="btn btn-sm btn-danger btn-deletar">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -587,9 +639,9 @@ $totalUnidades = count($unidades);
                                         <td><?php echo htmlspecialchars(substr($item['dieta']['descricao'], 0, 50)); ?>...</td>
                                         <td><?php echo date('d/m/Y', strtotime($item['dieta']['data_criacao'])); ?></td>
                                         <td class="table-actions">
-                                            <form action="../../index.php?action=dieta-deletar" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar esta dieta?');">
+                                            <form action="<?php echo getActionUrl('dieta-deletar'); ?>" method="POST" style="display:inline;" class="form-deletar" data-tipo="dieta" data-nome="<?php echo htmlspecialchars($dieta->getNome()); ?>">
                                                 <input type="hidden" name="id" value="<?php echo $item['dieta']['id']; ?>">
-                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                <button type="button" class="btn btn-sm btn-danger btn-deletar">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -616,7 +668,7 @@ $totalUnidades = count($unidades);
                     <h5 class="modal-title">Nova Unidade</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="../../index.php?action=unidade-cadastrar" method="POST">
+                <form action="<?php echo getActionUrl('unidade-cadastrar'); ?>" method="POST">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Estado</label>
@@ -656,7 +708,7 @@ $totalUnidades = count($unidades);
                     <h5 class="modal-title">Novo Curso</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="../../index.php?action=curso-cadastrar" method="POST">
+                <form action="<?php echo getActionUrl('curso-cadastrar'); ?>" method="POST">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Nome</label>
@@ -697,7 +749,7 @@ $totalUnidades = count($unidades);
                     <h5 class="modal-title">Novo Plano</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="../../index.php?action=plano-cadastrar" method="POST">
+                <form action="<?php echo getActionUrl('plano-cadastrar'); ?>" method="POST">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Preço</label>
@@ -725,7 +777,7 @@ $totalUnidades = count($unidades);
                     <h5 class="modal-title">Nova Turma</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="../../index.php?action=turma-cadastrar" method="POST">
+                <form action="<?php echo getActionUrl('turma-cadastrar'); ?>" method="POST">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Curso</label>
@@ -754,18 +806,65 @@ $totalUnidades = count($unidades);
                             <input type="text" name="nome" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Horário</label>
-                            <input type="text" name="horario" class="form-control" placeholder="Ex: Segunda e Quarta, 18:00" required>
+                            <label class="form-label">Data</label>
+                            <input type="date" name="data" id="turma_data" class="form-control" required onchange="verificarHorariosDisponiveis()">
                         </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Data Início</label>
-                                <input type="datetime-local" name="data_inicio" class="form-control" required>
+                        <div class="mb-3">
+                            <label class="form-label">Horário de Início</label>
+                            <select name="hora_inicio" id="hora_inicio" class="form-select" required onchange="calcularHoraFim()">
+                                <option value="">Selecione o horário</option>
+                            </select>
+                            <small class="text-muted">Horários disponíveis de 30 em 30 minutos (24h)</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Duração (em minutos)</label>
+                            <select name="duracao" id="duracao" class="form-select" required onchange="calcularHoraFim()">
+                                <option value="30">30 minutos</option>
+                                <option value="60">1 hora</option>
+                                <option value="90">1 hora e 30 minutos</option>
+                                <option value="120">2 horas</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Horário de Fim (calculado automaticamente)</label>
+                            <input type="text" id="hora_fim_display" class="form-control" readonly>
+                            <input type="hidden" name="data_inicio" id="data_inicio_hidden">
+                            <input type="hidden" name="data_fim" id="data_fim_hidden">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Dias da Semana (Recorrente)</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="dias_semana[]" value="1" id="dia_seg">
+                                <label class="form-check-label" for="dia_seg">Segunda-feira</label>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Data Fim</label>
-                                <input type="datetime-local" name="data_fim" class="form-control" required>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="dias_semana[]" value="2" id="dia_ter">
+                                <label class="form-check-label" for="dia_ter">Terça-feira</label>
                             </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="dias_semana[]" value="3" id="dia_qua">
+                                <label class="form-check-label" for="dia_qua">Quarta-feira</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="dias_semana[]" value="4" id="dia_qui">
+                                <label class="form-check-label" for="dia_qui">Quinta-feira</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="dias_semana[]" value="5" id="dia_sex">
+                                <label class="form-check-label" for="dia_sex">Sexta-feira</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="dias_semana[]" value="6" id="dia_sab">
+                                <label class="form-check-label" for="dia_sab">Sábado</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="dias_semana[]" value="0" id="dia_dom">
+                                <label class="form-check-label" for="dia_dom">Domingo</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Data Final (até quando a turma ocorrerá)</label>
+                            <input type="date" name="data_fim_turma" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Capacidade Máxima</label>
@@ -789,7 +888,7 @@ $totalUnidades = count($unidades);
                     <h5 class="modal-title">Novo Treino</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="../../index.php?action=treino-cadastrar" method="POST">
+                <form action="<?php echo getActionUrl('treino-cadastrar'); ?>" method="POST">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Aluno</label>
@@ -832,7 +931,7 @@ $totalUnidades = count($unidades);
                     <h5 class="modal-title">Nova Dieta</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="../../index.php?action=dieta-cadastrar" method="POST">
+                <form action="<?php echo getActionUrl('dieta-cadastrar'); ?>" method="POST">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Aluno</label>
@@ -867,23 +966,273 @@ $totalUnidades = count($unidades);
         </div>
     </div>
 
+    <!-- Modal Editar Usuário -->
+    <div class="modal fade" id="modalEditarUsuario" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Usuário</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="<?php echo getActionUrl('usuario-atualizar'); ?>" method="POST" id="formEditarUsuario">
+                    <input type="hidden" name="id" id="usuario_id">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nome</label>
+                                <input type="text" name="nome" id="usuario_nome" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" id="usuario_email" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">CPF</label>
+                                <input type="text" name="cpf" id="usuario_cpf" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Telefone</label>
+                                <input type="text" name="telefone" id="usuario_telefone" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Tipo</label>
+                                <select name="tipo" id="usuario_tipo" class="form-select" required>
+                                    <option value="1">1 - Admin</option>
+                                    <option value="2">2 - Instrutor</option>
+                                    <option value="3">3 - Aluno</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Estado</label>
+                                <input type="text" name="estado" id="usuario_estado" class="form-control" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Cidade</label>
+                                <input type="text" name="cidade" id="usuario_cidade" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Bairro</label>
+                                <input type="text" name="bairro" id="usuario_bairro" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Rua</label>
+                                <input type="text" name="rua" id="usuario_rua" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nova Senha (deixe em branco para não alterar)</label>
+                            <input type="password" name="senha" id="usuario_senha" class="form-control">
+                            <small class="text-muted">Deixe em branco se não quiser alterar a senha</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary-custom">Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalMensagem" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalMensagemTitulo">Mensagem</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="modalMensagemTexto">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function mostrarMensagem(titulo, mensagem) {
+            document.getElementById('modalMensagemTitulo').textContent = titulo;
+            document.getElementById('modalMensagemTexto').textContent = mensagem;
+            const modal = new bootstrap.Modal(document.getElementById('modalMensagem'));
+            modal.show();
+        }
+
         function editarUnidade(id) {
-            // Implementar edição
-            alert('Funcionalidade de edição em desenvolvimento');
+            mostrarMensagem('Em Desenvolvimento', 'Funcionalidade de edição em desenvolvimento');
         }
         function editarCurso(id) {
-            alert('Funcionalidade de edição em desenvolvimento');
+            mostrarMensagem('Em Desenvolvimento', 'Funcionalidade de edição em desenvolvimento');
         }
         function editarPlano(id) {
-            alert('Funcionalidade de edição em desenvolvimento');
+            mostrarMensagem('Em Desenvolvimento', 'Funcionalidade de edição em desenvolvimento');
         }
         function editarTurma(id) {
-            alert('Funcionalidade de edição em desenvolvimento');
+            mostrarMensagem('Em Desenvolvimento', 'Funcionalidade de edição em desenvolvimento');
         }
         function verTurma(id) {
             window.location.href = 'cursos.php?turma=' + id;
         }
+        
+        function gerarHorarios() {
+            const select = document.getElementById('hora_inicio');
+            if (!select) return;
+            select.innerHTML = '<option value="">Selecione o horário</option>';
+            
+            for (let hora = 0; hora < 24; hora++) {
+                for (let minuto = 0; minuto < 60; minuto += 30) {
+                    const horaStr = String(hora).padStart(2, '0');
+                    const minutoStr = String(minuto).padStart(2, '0');
+                    const valor = horaStr + ':' + minutoStr;
+                    const texto = horaStr + ':' + minutoStr;
+                    
+                    const option = document.createElement('option');
+                    option.value = valor;
+                    option.textContent = texto;
+                    select.appendChild(option);
+                }
+            }
+        }
+        
+        function verificarHorariosDisponiveis() {
+            const data = document.getElementById('turma_data');
+            if (!data || !data.value) return;
+            
+            fetch('<?php echo getActionUrl('turma-horarios-disponiveis'); ?>?data=' + data.value)
+                .then(response => response.json())
+                .then(horariosOcupados => {
+                    const select = document.getElementById('hora_inicio');
+                    if (!select) return;
+                    const options = select.querySelectorAll('option');
+                    
+                    options.forEach(option => {
+                        if (option.value) {
+                            const horaCompleta = data.value + ' ' + option.value + ':00';
+                            const ocupado = horariosOcupados.some(ocupado => {
+                                const inicioOcupado = new Date(ocupado.data_inicio);
+                                const fimOcupado = new Date(ocupado.data_fim);
+                                const horaCheck = new Date(horaCompleta);
+                                return horaCheck >= inicioOcupado && horaCheck < fimOcupado;
+                            });
+                            
+                            if (ocupado) {
+                                option.disabled = true;
+                                option.textContent = option.value + ' (Ocupado)';
+                                option.style.color = '#dc3545';
+                            } else {
+                                option.disabled = false;
+                                option.style.color = '';
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao verificar horários:', error);
+                });
+        }
+        
+        function calcularHoraFim() {
+            const horaInicio = document.getElementById('hora_inicio');
+            const duracao = document.getElementById('duracao');
+            const data = document.getElementById('turma_data');
+            
+            if (!horaInicio || !horaInicio.value || !data || !data.value || !duracao) return;
+            
+            const [hora, minuto] = horaInicio.value.split(':').map(Number);
+            const inicio = new Date(data.value + 'T' + horaInicio.value + ':00');
+            const fim = new Date(inicio.getTime() + parseInt(duracao.value) * 60000);
+            
+            const horaFim = String(fim.getHours()).padStart(2, '0') + ':' + String(fim.getMinutes()).padStart(2, '0');
+            const horaFimDisplay = document.getElementById('hora_fim_display');
+            const dataInicioHidden = document.getElementById('data_inicio_hidden');
+            const dataFimHidden = document.getElementById('data_fim_hidden');
+            
+            if (horaFimDisplay) horaFimDisplay.value = horaFim;
+            if (dataInicioHidden) dataInicioHidden.value = data.value + ' ' + horaInicio.value + ':00';
+            if (dataFimHidden) dataFimHidden.value = data.value + ' ' + horaFim + ':00';
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const botoesEditar = document.querySelectorAll('.btn-editar-usuario');
+            botoesEditar.forEach(function(botao) {
+                botao.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const nome = this.getAttribute('data-nome') || '';
+                    const email = this.getAttribute('data-email') || '';
+                    const cpf = this.getAttribute('data-cpf') || '';
+                    const telefone = this.getAttribute('data-telefone') || '';
+                    const tipo = this.getAttribute('data-tipo') || '3';
+                    const estado = this.getAttribute('data-estado') || '';
+                    const cidade = this.getAttribute('data-cidade') || '';
+                    const bairro = this.getAttribute('data-bairro') || '';
+                    const rua = this.getAttribute('data-rua') || '';
+                    
+                    document.getElementById('usuario_id').value = id || '';
+                    document.getElementById('usuario_nome').value = nome;
+                    document.getElementById('usuario_email').value = email;
+                    document.getElementById('usuario_cpf').value = cpf;
+                    document.getElementById('usuario_telefone').value = telefone;
+                    document.getElementById('usuario_tipo').value = tipo;
+                    document.getElementById('usuario_estado').value = estado;
+                    document.getElementById('usuario_cidade').value = cidade;
+                    document.getElementById('usuario_bairro').value = bairro;
+                    document.getElementById('usuario_rua').value = rua;
+                    document.getElementById('usuario_senha').value = '';
+                    
+                    const modalElement = document.getElementById('modalEditarUsuario');
+                    if (modalElement) {
+                        const modal = new bootstrap.Modal(modalElement);
+                        modal.show();
+                    } else {
+                        console.error('Modal não encontrado');
+                        mostrarMensagem('Erro', 'Erro: Modal não encontrado');
+                    }
+                });
+            });
+            
+            const modalTurma = document.getElementById('modalTurma');
+            if (modalTurma) {
+                modalTurma.addEventListener('show.bs.modal', function() {
+                    setTimeout(gerarHorarios, 100);
+                });
+            }
+            
+            document.querySelectorAll('.form-deletar').forEach(form => {
+                const btnDeletar = form.querySelector('.btn-deletar') || form.querySelector('button[type="submit"]');
+                if (btnDeletar) {
+                    if (btnDeletar.type === 'submit') {
+                        btnDeletar.type = 'button';
+                    }
+                    btnDeletar.addEventListener('click', function() {
+                        const tipo = form.getAttribute('data-tipo');
+                        const nome = form.getAttribute('data-nome');
+                        const mensagem = `Tem certeza que deseja deletar este ${tipo}${nome ? ' (' + nome + ')' : ''}?`;
+                        mostrarConfirmacao('Confirmar Exclusão', mensagem, () => {
+                            form.submit();
+                        });
+                    });
+                }
+            });
+            
+            function mostrarConfirmacao(titulo, texto, callback) {
+                document.getElementById('modalConfirmacaoTitulo').textContent = titulo;
+                document.getElementById('modalConfirmacaoTexto').textContent = texto;
+                const btnConfirmar = document.getElementById('modalConfirmacaoBtn');
+                btnConfirmar.onclick = function() {
+                    callback();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirmacao'));
+                    modal.hide();
+                };
+                const modal = new bootstrap.Modal(document.getElementById('modalConfirmacao'));
+                modal.show();
+            }
+            
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -132,21 +132,41 @@ nav > section {
     position: relative;
 }
 
+/* Área invisível de "ponte" entre o avatar e o dropdown para facilitar navegação */
+.usuario-menu::before {
+    content: '';
+    position: absolute;
+    top: 45px;
+    right: -20px;
+    width: 240px;
+    height: 25px;
+    z-index: 1002;
+    background: transparent;
+}
+
 .usuario-dropdown {
     position: absolute;
-    top: 60px;
+    top: 55px;
     right: 0;
     background: white;
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     min-width: 200px;
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
     z-index: 1001;
     overflow: hidden;
+    pointer-events: none;
 }
 
-.usuario-menu:hover .usuario-dropdown {
-    display: block;
+.usuario-menu:hover .usuario-dropdown,
+.usuario-dropdown:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 .usuario-dropdown-item {

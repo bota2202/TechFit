@@ -1,77 +1,15 @@
-const cursos = [
-    {
-        id: 1,
-        nome: 'Musculação',
-        tipo: 'forca',
-        descricao: 'Treinos completos para ganho de massa e força com acompanhamento profissional especializado.',
-        preco: 99.00,
-        imagem: '../Public/Imagens/musculacao.jpg'
-    },
-    {
-        id: 2,
-        nome: 'Yoga',
-        tipo: 'mente-corpo',
-        descricao: 'Equilíbrio, alongamento e bem-estar físico e mental com professores especializados.',
-        preco: 149.00,
-        imagem: '../Public/Imagens/yoga.jpg'
-    },
-    {
-        id: 3,
-        nome: 'Pilates',
-        tipo: 'mente-corpo',
-        descricao: 'Fortaleça seu corpo e melhore sua postura com aulas modernas de Pilates.',
-        preco: 149.00,
-        imagem: '../Public/Imagens/pilates.jpg'
-    },
-    {
-        id: 4,
-        nome: 'CrossFit',
-        tipo: 'forca',
-        descricao: 'Treinos intensos de alta performance para resistência e condicionamento físico.',
-        preco: 199.00,
-        imagem: '../Public/Imagens/crossfit.jpg'
-    },
-    {
-        id: 5,
-        nome: 'Spinning',
-        tipo: 'cardio',
-        descricao: 'Aulas dinâmicas de bike indoor com muita energia e queima calórica intensa.',
-        preco: 149.00,
-        imagem: '../Public/Imagens/spinning.jpg'
-    },
-    {
-        id: 6,
-        nome: 'Zumba',
-        tipo: 'cardio',
-        descricao: 'Dance, divirta-se e entre em forma com coreografias animadas e intensas.',
-        preco: 99.00,
-        imagem: '../Public/Imagens/zumba.jpg'
-    },
-    {
-        id: 7,
-        nome: 'Muay Thai',
-        tipo: 'lutas',
-        descricao: 'Defesa pessoal e condicionamento físico com artes marciais de alto impacto.',
-        preco: 199.00,
-        imagem: '../Public/Imagens/muaythai.jpg'
-    },
-    {
-        id: 8,
-        nome: 'Natação',
-        tipo: 'cardio',
-        descricao: 'Aulas para todas as idades, desenvolvendo resistência e saúde cardiovascular.',
-        preco: 149.00,
-        imagem:  '../Public/Imagens/natacao.jpg'
-    },
-    {
-        id: 9,
-        nome: 'Treinamento Funcional',
-        tipo: 'forca',
-        descricao: 'Movimentos naturais para melhorar força, coordenação e qualidade de vida.',
-        preco: 149.00,
-        imagem: '../Public/Imagens/funcional.jpg'
-    }
-];
+let cursos = [];
+const imagensCursos = {
+    'Musculação': '../Public/Imagens/musculacao.jpg',
+    'Yoga': '../Public/Imagens/yoga.jpg',
+    'Pilates': '../Public/Imagens/pilates.jpg',
+    'CrossFit': '../Public/Imagens/crossfit.jpg',
+    'Spinning': '../Public/Imagens/spinning.jpg',
+    'Zumba': '../Public/Imagens/zumba.jpg',
+    'Muay Thai': '../Public/Imagens/muaythai.jpg',
+    'Natação': '../Public/Imagens/natacao.jpg',
+    'Treinamento Funcional': '../Public/Imagens/funcional.jpg'
+};
 
 let filtroAtivo = 'todos';
 
@@ -87,15 +25,17 @@ function criarCardCurso(curso) {
         'lutas': 'Lutas'
     };
     
+    const imagem = imagensCursos[curso.nome] || '../Public/Imagens/musculacao.jpg';
+    
     card.innerHTML = `
-        <img src="${curso.imagem}" alt="${curso.nome}" class="curso-imagem" onerror="this.style.display='none';">
+        <img src="${imagem}" alt="${curso.nome}" class="curso-imagem" onerror="this.style.display='none';">
         <div class="curso-content">
-            <span class="curso-tipo ${curso.tipo}">${tipoLabel[curso.tipo]}</span>
+            <span class="curso-tipo ${curso.tipo}">${tipoLabel[curso.tipo] || curso.tipo}</span>
             <h3 class="curso-nome">${curso.nome}</h3>
-            <p class="curso-descricao">${curso.descricao}</p>
+            <p class="curso-descricao">${curso.descricao || ''}</p>
             <div class="curso-footer">
                 <div class="curso-preco">
-                    R$ <span>${curso.preco.toFixed(2).replace('.', ',')}</span>
+                    R$ <span>${parseFloat(curso.preco).toFixed(2).replace('.', ',')}</span>
                 </div>
                 <button class="btn-ver-turmas" data-curso-id="${curso.id}" data-curso-nome="${curso.nome}">Ver turmas</button>
             </div>
@@ -109,24 +49,58 @@ function renderizarCursos() {
     const grid = document.getElementById('cursos-grid');
     if (!grid) return;
     
-    grid.innerHTML = '';
+    grid.innerHTML = '<div class="loading">Carregando cursos...</div>';
     
-    const cursosFiltrados = filtroAtivo === 'todos' 
-        ? cursos 
-        : cursos.filter(curso => curso.tipo === filtroAtivo);
+    const url = window.location.pathname.includes('/Codigo/View/') 
+        ? '../../index.php?action=listar-cursos' 
+        : 'index.php?action=listar-cursos';
     
-    cursosFiltrados.forEach(curso => {
-        const card = criarCardCurso(curso);
-        grid.appendChild(card);
-    });
-    
-    document.querySelectorAll('.btn-ver-turmas').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const cursoId = btn.dataset.cursoId;
-            const cursoNome = btn.dataset.cursoNome;
-            abrirModalTurmas(cursoId, cursoNome);
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro na resposta do servidor: ' + response.status);
+            }
+            return response.text();
+        })
+        .then(text => {
+            try {
+                const data = JSON.parse(text);
+                if (data.erro) {
+                    throw new Error(data.erro);
+                }
+                cursos = data;
+                grid.innerHTML = '';
+                
+                if (cursos.length === 0) {
+                    grid.innerHTML = '<p class="text-center">Nenhum curso disponível no momento.</p>';
+                    return;
+                }
+                
+                const cursosFiltrados = filtroAtivo === 'todos' 
+                    ? cursos 
+                    : cursos.filter(curso => curso.tipo === filtroAtivo);
+                
+                cursosFiltrados.forEach(curso => {
+                    const card = criarCardCurso(curso);
+                    grid.appendChild(card);
+                });
+                
+                document.querySelectorAll('.btn-ver-turmas').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const cursoId = btn.dataset.cursoId;
+                        const cursoNome = btn.dataset.cursoNome;
+                        abrirModalTurmas(cursoId, cursoNome);
+                    });
+                });
+            } catch (e) {
+                console.error('Erro ao parsear JSON:', e, 'Resposta:', text);
+                throw new Error('Resposta inválida do servidor');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao carregar cursos:', error);
+            grid.innerHTML = '<p class="text-center text-danger">Erro ao carregar cursos. Tente novamente.</p>';
         });
-    });
 }
 
 function inicializarFiltros() {
@@ -150,16 +124,161 @@ function abrirModalTurmas(cursoId, cursoNome) {
     if (!modal || !modalTitulo || !modalConteudo) return;
     
     modalTitulo.textContent = `Turmas - ${cursoNome}`;
-    modalConteudo.innerHTML = `
-        <div class="modal-mensagem">
-            <i class="fas fa-info-circle"></i>
-            <p>As turmas serão exibidas aqui em breve.</p>
-            <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">Em desenvolvimento...</p>
-        </div>
-    `;
+    modalConteudo.innerHTML = '<div class="loading">Carregando turmas...</div>';
     
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    
+    const url = window.location.pathname.includes('/Codigo/View/') 
+        ? `../../index.php?action=listar-turmas-curso&id_curso=${cursoId}` 
+        : `index.php?action=listar-turmas-curso&id_curso=${cursoId}`;
+    
+    console.log('Carregando turmas para curso:', cursoId, 'URL:', url);
+    
+    fetch(url)
+        .then(response => {
+            console.log('Resposta recebida:', response.status, response.statusText);
+            if (!response.ok) {
+                throw new Error('Erro na resposta do servidor: ' + response.status);
+            }
+            return response.text();
+        })
+        .then(text => {
+            console.log('Resposta texto recebida:', text.substring(0, 200));
+            try {
+                const turmas = JSON.parse(text);
+                console.log('Turmas parseadas:', turmas);
+                if (turmas.erro) {
+                    console.error('Erro do servidor:', turmas.erro);
+                    throw new Error(turmas.erro);
+                }
+                if (!Array.isArray(turmas)) {
+                    console.error('Resposta não é um array:', turmas);
+                    throw new Error('Resposta inválida: não é um array');
+                }
+                return turmas;
+            } catch (e) {
+                console.error('Erro ao parsear JSON:', e, 'Resposta completa:', text);
+                modalConteudo.innerHTML = `
+                    <div class="modal-mensagem" style="background: #f8d7da; border-color: #dc3545;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p><strong>Erro ao carregar turmas</strong></p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">${e.message}</p>
+                        <p style="margin-top: 10px; font-size: 0.8rem; color: #666;">Verifique o console do navegador (F12) para mais detalhes.</p>
+                    </div>
+                `;
+                throw e;
+            }
+        })
+        .then(turmas => {
+            console.log('Processando', turmas.length, 'turmas');
+            if (turmas.length === 0) {
+                modalConteudo.innerHTML = `
+                    <div class="modal-mensagem">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Nenhuma turma disponível para este curso no momento.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const temPlanoAtivo = turmas.length > 0 && turmas[0].tem_plano_ativo;
+            
+            if (!temPlanoAtivo) {
+                modalConteudo.innerHTML = `
+                    <div class="modal-mensagem" style="background: #fff3cd; border-color: #ffc107;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p><strong>Você precisa ter um plano ativo para se matricular em cursos!</strong></p>
+                        <p style="margin-top: 10px;">Acesse a página de <a href="planos.php" style="color: #11998e; font-weight: bold;">Planos</a> para contratar um plano.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '<div class="turmas-lista">';
+            turmas.forEach(turma => {
+                let dataInicio, dataFim;
+                try {
+                    if (turma.data_inicio && turma.data_inicio !== '0000-00-00' && turma.data_inicio !== '0000-00-00 00:00:00') {
+                        dataInicio = new Date(turma.data_inicio);
+                    } else {
+                        dataInicio = new Date();
+                    }
+                    if (turma.data_fim && turma.data_fim !== '0000-00-00' && turma.data_fim !== '0000-00-00 00:00:00') {
+                        dataFim = new Date(turma.data_fim);
+                    } else {
+                        dataFim = new Date();
+                        dataFim.setMonth(dataFim.getMonth() + 1);
+                    }
+                } catch (e) {
+                    console.error('Erro ao parsear data:', e, turma);
+                    dataInicio = new Date();
+                    dataFim = new Date();
+                    dataFim.setMonth(dataFim.getMonth() + 1);
+                }
+                const disponivel = turma.disponivel && !turma.ja_matriculado;
+                
+                html += `
+                    <div class="turma-item ${!disponivel ? 'indisponivel' : ''}">
+                        <div class="turma-info">
+                            <h4>${turma.nome}</h4>
+                            <p><i class="fas fa-clock"></i> ${turma.horario || 'Horário a definir'}</p>
+                            <p><i class="fas fa-calendar"></i> ${dataInicio.toLocaleDateString('pt-BR')} - ${dataFim.toLocaleDateString('pt-BR')}</p>
+                            <p><i class="fas fa-users"></i> ${turma.ocupacao}/${turma.capacidade} alunos</p>
+                        </div>
+                        <div class="turma-acoes">
+                            ${turma.ja_matriculado ? 
+                                '<span class="badge badge-success">Você está matriculado</span>' :
+                                (turma.disponivel ? 
+                                    `<button class="btn-matricular" data-turma-id="${turma.id}" data-turma-nome="${turma.nome}">
+                                        <i class="fas fa-user-plus"></i> Matricular-se
+                                    </button>` :
+                                    '<span class="badge badge-danger">Turma lotada</span>'
+                                )
+                            }
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            modalConteudo.innerHTML = html;
+            
+            document.querySelectorAll('.btn-matricular').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const turmaId = btn.dataset.turmaId;
+                    const turmaNome = btn.dataset.turmaNome;
+                    mostrarConfirmacao(
+                        'Confirmar Matrícula',
+                        `Deseja realmente se matricular na turma "${turmaNome}"?`,
+                        () => matricularEmTurma(turmaId)
+                    );
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao carregar turmas:', error);
+            modalConteudo.innerHTML = `
+                <div class="modal-mensagem">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>Erro ao carregar turmas. Tente novamente.</p>
+                </div>
+            `;
+        });
+}
+
+function matricularEmTurma(idTurma) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '../../index.php?action=matricular';
+    
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'id_turma';
+    input.value = idTurma;
+    
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
 }
 
 function fecharModalTurmas() {
