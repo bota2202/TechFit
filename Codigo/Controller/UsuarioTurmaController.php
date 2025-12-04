@@ -20,6 +20,7 @@ class UsuarioTurmaController
         require_once __DIR__ . "/../Model/helpers.php";
         require_once __DIR__ . "/../Model/UsuarioPlanoDAO.php";
         require_once __DIR__ . "/../Model/TurmaDAO.php";
+        require_once __DIR__ . "/../Model/UsuarioTurma.php";
         
         Auth::requireAuth();
         
@@ -41,8 +42,15 @@ class UsuarioTurmaController
 
         $turmaDAO = new TurmaDAO();
         $turma = $turmaDAO->readById($idTurma);
-        if (!$turma || !$turma->getAtiva()) {
-            $_SESSION['erro'] = 'Turma não encontrada ou inativa!';
+        if (!$turma) {
+            $_SESSION['erro'] = 'Turma não encontrada!';
+            header('Location: ' . getViewUrl('cursos.php'));
+            exit;
+        }
+        
+        // Verifica se a turma está ativa (considera null como ativa por padrão)
+        if ($turma->getAtiva() === false) {
+            $_SESSION['erro'] = 'Turma inativa!';
             header('Location: ' . getViewUrl('cursos.php'));
             exit;
         }
@@ -70,7 +78,14 @@ class UsuarioTurmaController
             header('Location: ' . getViewUrl('cursos.php'));
             exit;
         } catch (PDOException $e) {
-            error_log("Erro ao matricular: " . $e->getMessage());
+            error_log("Erro ao matricular usuário $idUsuario na turma $idTurma: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            $_SESSION['erro'] = 'Erro ao realizar matrícula: ' . $e->getMessage();
+            header('Location: ' . getViewUrl('cursos.php'));
+            exit;
+        } catch (Exception $e) {
+            error_log("Erro geral ao matricular: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
             $_SESSION['erro'] = 'Erro ao realizar matrícula. Tente novamente.';
             header('Location: ' . getViewUrl('cursos.php'));
             exit;

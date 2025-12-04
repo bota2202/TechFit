@@ -169,10 +169,10 @@ class UsuarioController
         $cpf = trim($_POST['cpf'] ?? '');
         $telefone = trim($_POST['telefone'] ?? '');
         $tipo = intval($_POST['tipo'] ?? TIPO_USUARIO_ALUNO);
-        $estado = trim($_POST['estado'] ?? '');
-        $cidade = trim($_POST['cidade'] ?? '');
-        $bairro = trim($_POST['bairro'] ?? '');
-        $rua = trim($_POST['rua'] ?? '');
+        $estado = trim($_POST['estado'] ?? '') ?: null;
+        $cidade = trim($_POST['cidade'] ?? '') ?: null;
+        $bairro = trim($_POST['bairro'] ?? '') ?: null;
+        $rua = trim($_POST['rua'] ?? '') ?: null;
         $senha = trim($_POST['senha'] ?? '');
         
         if (!$id || !$nome || !$email || !$cpf || !$telefone) {

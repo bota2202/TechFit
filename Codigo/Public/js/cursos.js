@@ -84,17 +84,9 @@ function renderizarCursos() {
                     const card = criarCardCurso(curso);
                     grid.appendChild(card);
                 });
-                
-                document.querySelectorAll('.btn-ver-turmas').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const cursoId = btn.dataset.cursoId;
-                        const cursoNome = btn.dataset.cursoNome;
-                        abrirModalTurmas(cursoId, cursoNome);
-                    });
-                });
             } catch (e) {
                 console.error('Erro ao parsear JSON:', e, 'Resposta:', text);
-                throw new Error('Resposta inválida do servidor');
+                grid.innerHTML = '<p class="text-center text-danger">Erro ao carregar cursos. Tente novamente.</p>';
             }
         })
         .catch(error => {
@@ -133,127 +125,96 @@ function abrirModalTurmas(cursoId, cursoNome) {
         ? `../../index.php?action=listar-turmas-curso&id_curso=${cursoId}` 
         : `index.php?action=listar-turmas-curso&id_curso=${cursoId}`;
     
-    console.log('Carregando turmas para curso:', cursoId, 'URL:', url);
-    
     fetch(url)
-        .then(response => {
-            console.log('Resposta recebida:', response.status, response.statusText);
-            if (!response.ok) {
-                throw new Error('Erro na resposta do servidor: ' + response.status);
-            }
-            return response.text();
-        })
+        .then(response => response.text())
         .then(text => {
-            console.log('Resposta texto recebida:', text.substring(0, 200));
             try {
                 const turmas = JSON.parse(text);
-                console.log('Turmas parseadas:', turmas);
                 if (turmas.erro) {
-                    console.error('Erro do servidor:', turmas.erro);
                     throw new Error(turmas.erro);
                 }
                 if (!Array.isArray(turmas)) {
-                    console.error('Resposta não é um array:', turmas);
                     throw new Error('Resposta inválida: não é um array');
                 }
-                return turmas;
-            } catch (e) {
-                console.error('Erro ao parsear JSON:', e, 'Resposta completa:', text);
-                modalConteudo.innerHTML = `
-                    <div class="modal-mensagem" style="background: #f8d7da; border-color: #dc3545;">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <p><strong>Erro ao carregar turmas</strong></p>
-                        <p style="margin-top: 10px; font-size: 0.9rem;">${e.message}</p>
-                        <p style="margin-top: 10px; font-size: 0.8rem; color: #666;">Verifique o console do navegador (F12) para mais detalhes.</p>
-                    </div>
-                `;
-                throw e;
-            }
-        })
-        .then(turmas => {
-            console.log('Processando', turmas.length, 'turmas');
-            if (turmas.length === 0) {
-                modalConteudo.innerHTML = `
-                    <div class="modal-mensagem">
-                        <i class="fas fa-info-circle"></i>
-                        <p>Nenhuma turma disponível para este curso no momento.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            const temPlanoAtivo = turmas.length > 0 && turmas[0].tem_plano_ativo;
-            
-            if (!temPlanoAtivo) {
-                modalConteudo.innerHTML = `
-                    <div class="modal-mensagem" style="background: #fff3cd; border-color: #ffc107;">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p><strong>Você precisa ter um plano ativo para se matricular em cursos!</strong></p>
-                        <p style="margin-top: 10px;">Acesse a página de <a href="planos.php" style="color: #11998e; font-weight: bold;">Planos</a> para contratar um plano.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = '<div class="turmas-lista">';
-            turmas.forEach(turma => {
-                let dataInicio, dataFim;
-                try {
-                    if (turma.data_inicio && turma.data_inicio !== '0000-00-00' && turma.data_inicio !== '0000-00-00 00:00:00') {
-                        dataInicio = new Date(turma.data_inicio);
-                    } else {
+                
+                if (turmas.length === 0) {
+                    modalConteudo.innerHTML = `
+                        <div class="modal-mensagem">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Nenhuma turma disponível para este curso no momento.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const temPlanoAtivo = turmas.length > 0 && turmas[0].tem_plano_ativo;
+                
+                if (!temPlanoAtivo) {
+                    modalConteudo.innerHTML = `
+                        <div class="modal-mensagem" style="background: #fff3cd; border-color: #ffc107;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p><strong>Você precisa ter um plano ativo para se matricular em cursos!</strong></p>
+                            <p style="margin-top: 10px;">Acesse a página de <a href="planos.php" style="color: #11998e; font-weight: bold;">Planos</a> para contratar um plano.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '<div class="turmas-lista">';
+                turmas.forEach(turma => {
+                    let dataInicio, dataFim;
+                    try {
+                        if (turma.data_inicio && turma.data_inicio !== '0000-00-00' && turma.data_inicio !== '0000-00-00 00:00:00') {
+                            dataInicio = new Date(turma.data_inicio);
+                        } else {
+                            dataInicio = new Date();
+                        }
+                        if (turma.data_fim && turma.data_fim !== '0000-00-00' && turma.data_fim !== '0000-00-00 00:00:00') {
+                            dataFim = new Date(turma.data_fim);
+                        } else {
+                            dataFim = new Date();
+                            dataFim.setMonth(dataFim.getMonth() + 1);
+                        }
+                    } catch (e) {
                         dataInicio = new Date();
-                    }
-                    if (turma.data_fim && turma.data_fim !== '0000-00-00' && turma.data_fim !== '0000-00-00 00:00:00') {
-                        dataFim = new Date(turma.data_fim);
-                    } else {
                         dataFim = new Date();
                         dataFim.setMonth(dataFim.getMonth() + 1);
                     }
-                } catch (e) {
-                    console.error('Erro ao parsear data:', e, turma);
-                    dataInicio = new Date();
-                    dataFim = new Date();
-                    dataFim.setMonth(dataFim.getMonth() + 1);
-                }
-                const disponivel = turma.disponivel && !turma.ja_matriculado;
-                
-                html += `
-                    <div class="turma-item ${!disponivel ? 'indisponivel' : ''}">
-                        <div class="turma-info">
-                            <h4>${turma.nome}</h4>
-                            <p><i class="fas fa-clock"></i> ${turma.horario || 'Horário a definir'}</p>
-                            <p><i class="fas fa-calendar"></i> ${dataInicio.toLocaleDateString('pt-BR')} - ${dataFim.toLocaleDateString('pt-BR')}</p>
-                            <p><i class="fas fa-users"></i> ${turma.ocupacao}/${turma.capacidade} alunos</p>
+                    const disponivel = turma.disponivel && !turma.ja_matriculado;
+                    
+                    html += `
+                        <div class="turma-item ${!disponivel ? 'indisponivel' : ''}">
+                            <div class="turma-info">
+                                <h4>${turma.nome}</h4>
+                                <p><i class="fas fa-clock"></i> ${turma.horario || 'Horário a definir'}</p>
+                                <p><i class="fas fa-calendar"></i> ${dataInicio.toLocaleDateString('pt-BR')} - ${dataFim.toLocaleDateString('pt-BR')}</p>
+                                <p><i class="fas fa-users"></i> ${turma.ocupacao}/${turma.capacidade} alunos</p>
+                            </div>
+                            <div class="turma-acoes">
+                                ${turma.ja_matriculado ? 
+                                    '<span class="badge badge-success">Você está matriculado</span>' :
+                                    (turma.disponivel ? 
+                                        `<button class="btn-matricular" data-turma-id="${turma.id}" data-turma-nome="${turma.nome}">
+                                            <i class="fas fa-user-plus"></i> Matricular-se
+                                        </button>` :
+                                        '<span class="badge badge-danger">Turma lotada</span>'
+                                    )
+                                }
+                            </div>
                         </div>
-                        <div class="turma-acoes">
-                            ${turma.ja_matriculado ? 
-                                '<span class="badge badge-success">Você está matriculado</span>' :
-                                (turma.disponivel ? 
-                                    `<button class="btn-matricular" data-turma-id="${turma.id}" data-turma-nome="${turma.nome}">
-                                        <i class="fas fa-user-plus"></i> Matricular-se
-                                    </button>` :
-                                    '<span class="badge badge-danger">Turma lotada</span>'
-                                )
-                            }
-                        </div>
+                    `;
+                });
+                html += '</div>';
+                modalConteudo.innerHTML = html;
+            } catch (e) {
+                console.error('Erro ao processar turmas:', e);
+                modalConteudo.innerHTML = `
+                    <div class="modal-mensagem">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Erro ao carregar turmas. Tente novamente.</p>
                     </div>
                 `;
-            });
-            html += '</div>';
-            modalConteudo.innerHTML = html;
-            
-            document.querySelectorAll('.btn-matricular').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const turmaId = btn.dataset.turmaId;
-                    const turmaNome = btn.dataset.turmaNome;
-                    mostrarConfirmacao(
-                        'Confirmar Matrícula',
-                        `Deseja realmente se matricular na turma "${turmaNome}"?`,
-                        () => matricularEmTurma(turmaId)
-                    );
-                });
-            });
+            }
         })
         .catch(error => {
             console.error('Erro ao carregar turmas:', error);
@@ -267,9 +228,18 @@ function abrirModalTurmas(cursoId, cursoNome) {
 }
 
 function matricularEmTurma(idTurma) {
+    const currentPath = window.location.pathname;
+    let actionUrl = 'index.php?action=matricular';
+    
+    if (currentPath.includes('/Codigo/View/')) {
+        actionUrl = '../../index.php?action=matricular';
+    } else if (currentPath.includes('/Codigo/')) {
+        actionUrl = '../index.php?action=matricular';
+    }
+    
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = '../../index.php?action=matricular';
+    form.action = actionUrl;
     
     const input = document.createElement('input');
     input.type = 'hidden';
@@ -289,20 +259,56 @@ function fecharModalTurmas() {
     }
 }
 
+// Delegação de eventos para elementos dinâmicos
+document.addEventListener('click', function(e) {
+    // Botão ver turmas
+    if (e.target.closest('.btn-ver-turmas')) {
+        const btn = e.target.closest('.btn-ver-turmas');
+        const cursoId = btn.getAttribute('data-curso-id');
+        const cursoNome = btn.getAttribute('data-curso-nome');
+        if (cursoId && cursoNome) {
+            abrirModalTurmas(cursoId, cursoNome);
+        }
+    }
+    
+    // Botão matricular
+    if (e.target.closest('.btn-matricular')) {
+        const btn = e.target.closest('.btn-matricular');
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const turmaId = btn.getAttribute('data-turma-id');
+        const turmaNome = btn.getAttribute('data-turma-nome');
+        
+        if (!turmaId) return;
+        
+        if (typeof window.mostrarConfirmacao === 'function') {
+            window.mostrarConfirmacao(
+                'Confirmar Matrícula',
+                `Deseja realmente se matricular na turma "${turmaNome}"?`,
+                function() {
+                    matricularEmTurma(turmaId);
+                }
+            );
+        } else {
+            if (confirm(`Deseja realmente se matricular na turma "${turmaNome}"?`)) {
+                matricularEmTurma(turmaId);
+            }
+        }
+    }
+    
+    // Fechar modal
+    if (e.target.classList.contains('modal-fechar') || (e.target.closest('.modal-overlay') && e.target.classList.contains('modal-overlay'))) {
+        fecharModalTurmas();
+    }
+});
+
 function inicializar() {
     renderizarCursos();
     inicializarFiltros();
     
     const modal = document.getElementById('modal-turmas');
     const btnFechar = document.querySelector('.modal-fechar');
-    
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                fecharModalTurmas();
-            }
-        });
-    }
     
     if (btnFechar) {
         btnFechar.addEventListener('click', fecharModalTurmas);
@@ -316,4 +322,3 @@ function inicializar() {
 }
 
 document.addEventListener('DOMContentLoaded', inicializar);
-

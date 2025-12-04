@@ -36,28 +36,26 @@ function criarCardPlano(plano, temPlanoAtivo) {
         </div>
         ${temPlanoAtivo ? 
             '<button class="btn-assinar" disabled style="opacity: 0.5; cursor: not-allowed;">Você já possui um plano ativo</button>' :
-            `<button class="btn-assinar" data-plano-id="${plano.id}">Assinar Agora</button>`
+            `<button class="btn-assinar" data-plano-id="${plano.id}" data-plano-nome="${nomePlano}" data-plano-preco="${preco}">Assinar Agora</button>`
         }
     `;
-    
-    if (!temPlanoAtivo) {
-        const btnAssinar = card.querySelector('.btn-assinar');
-        btnAssinar.addEventListener('click', () => {
-            mostrarConfirmacao(
-                'Confirmar Assinatura',
-                `Deseja realmente assinar o plano ${nomePlano} por R$ ${preco.toFixed(2).replace('.', ',')}?`,
-                () => assinarPlano(plano.id)
-            );
-        });
-    }
     
     return card;
 }
 
 function assinarPlano(idPlano) {
+    const currentPath = window.location.pathname;
+    let actionUrl = 'index.php?action=contratar-plano';
+    
+    if (currentPath.includes('/Codigo/View/')) {
+        actionUrl = '../../index.php?action=contratar-plano';
+    } else if (currentPath.includes('/Codigo/')) {
+        actionUrl = '../index.php?action=contratar-plano';
+    }
+    
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = '../../index.php?action=contratar-plano';
+    form.action = actionUrl;
     
     const input = document.createElement('input');
     input.type = 'hidden';
@@ -106,7 +104,7 @@ function renderizarPlanos() {
                 });
             } catch (e) {
                 console.error('Erro ao parsear JSON:', e, 'Resposta:', text);
-                throw new Error('Resposta inválida do servidor');
+                grid.innerHTML = '<p class="text-center text-danger">Erro ao carregar planos. Tente novamente.</p>';
             }
         })
         .catch(error => {
@@ -115,8 +113,42 @@ function renderizarPlanos() {
         });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// Usa delegação de eventos para garantir que funcione mesmo com elementos dinâmicos
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.btn-assinar')) {
+        const btn = e.target.closest('.btn-assinar');
+        if (btn.disabled) return;
+        
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const idPlano = btn.getAttribute('data-plano-id');
+        const nomePlano = btn.getAttribute('data-plano-nome');
+        const preco = btn.getAttribute('data-plano-preco');
+        
+        if (!idPlano) {
+            console.error('ID do plano não encontrado');
+            return;
+        }
+        
+        // Tenta usar o modal, se não funcionar usa confirm nativo
+        if (typeof window.mostrarConfirmacao === 'function') {
+            window.mostrarConfirmacao(
+                'Confirmar Assinatura',
+                `Deseja realmente assinar o plano ${nomePlano} por R$ ${parseFloat(preco).toFixed(2).replace('.', ',')}?`,
+                function() {
+                    assinarPlano(idPlano);
+                }
+            );
+        } else {
+            if (confirm(`Deseja realmente assinar o plano ${nomePlano} por R$ ${parseFloat(preco).toFixed(2).replace('.', ',')}?`)) {
+                assinarPlano(idPlano);
+            }
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
     temPlanoAtivo = document.body.dataset.temPlanoAtivo === '1';
     renderizarPlanos();
 });
-

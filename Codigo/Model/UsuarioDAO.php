@@ -2,6 +2,7 @@
 
 include_once __DIR__ . "/Conexao.php";
 include_once __DIR__ .  "/Usuario.php";
+include_once __DIR__ . "/config.php";
 
 class UsuarioDAO
 {
@@ -11,6 +12,7 @@ class UsuarioDAO
     {
         $this->conn = Conexao::getInstance();
         $this->criarTabela();
+        $this->inserirUsuarioAdmin();
     }
 
     private function criarTabela()
@@ -33,6 +35,53 @@ class UsuarioDAO
             $this->conn->exec($sql);
         } catch(PDOException $e) {
             error_log("Erro ao criar tabela Usuarios: " . $e->getMessage());
+        }
+    }
+
+    private function inserirUsuarioAdmin()
+    {
+        try {
+            // Verifica se o admin já existe
+            $sql = "SELECT id_usuario FROM usuarios WHERE email_usuario = 'admin@admin' OR id_usuario = 1";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $existe = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$existe) {
+                $senhaHash = password_hash('admin', PASSWORD_DEFAULT);
+                
+                $tipoAdmin = TIPO_USUARIO_ADMIN;
+                $sql = "INSERT INTO usuarios (
+                    id_usuario,
+                    email_usuario,
+                    senha_usuario_hash,
+                    nome_usuario,
+                    telefone_usuario,
+                    cpf_usuario,
+                    tipo_usuario,
+                    cidade_usuario,
+                    estado_usuario,
+                    bairro_usuario,
+                    rua_usuario
+                ) VALUES (
+                    1,
+                    'admin@admin',
+                    ?,
+                    'admin',
+                    '00000000000',
+                    '00000000000',
+                    ?,
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL
+                )";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->execute([$senhaHash, $tipoAdmin]);
+            }
+        } catch(PDOException $e) {
+            error_log("Erro ao inserir usuário admin: " . $e->getMessage());
         }
     }
 

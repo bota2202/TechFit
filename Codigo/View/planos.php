@@ -126,17 +126,17 @@ if ($usuarioLogado) {
         </div>
     </footer>
 
-    <div class="modal-overlay" id="modal-confirmacao" style="display: none; z-index: 2000;">
+    <div class="modal-overlay" id="modal-confirmacao">
         <div class="modal-container" style="max-width: 400px;">
             <div class="modal-header">
                 <h2 class="modal-titulo" id="modal-confirmacao-titulo">Confirmar</h2>
-                <button class="modal-fechar" onclick="fecharModalConfirmacao()">×</button>
+                <button class="modal-fechar" onclick="window.fecharModalConfirmacao()">×</button>
             </div>
             <div class="modal-body">
                 <p id="modal-confirmacao-texto"></p>
             </div>
             <div class="modal-footer" style="padding: 15px; border-top: 1px solid #ddd; display: flex; gap: 10px; justify-content: flex-end;">
-                <button class="btn btn-secondary" onclick="fecharModalConfirmacao()" style="padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
+                <button class="btn btn-secondary" onclick="window.fecharModalConfirmacao()" style="padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
                 <button class="btn btn-primary" id="modal-confirmacao-confirmar" style="padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer; background: #11998e; color: white;">Confirmar</button>
             </div>
         </div>
@@ -145,28 +145,66 @@ if ($usuarioLogado) {
     <script>
         let confirmacaoCallback = null;
         
-        function mostrarConfirmacao(titulo, texto, callback) {
-            document.getElementById('modal-confirmacao-titulo').textContent = titulo;
-            document.getElementById('modal-confirmacao-texto').textContent = texto;
-            confirmacaoCallback = callback;
-            document.getElementById('modal-confirmacao').style.display = 'flex';
-        }
-        
-        function fecharModalConfirmacao() {
-            document.getElementById('modal-confirmacao').style.display = 'none';
-            confirmacaoCallback = null;
-        }
-        
-        document.getElementById('modal-confirmacao-confirmar').addEventListener('click', function() {
-            if (confirmacaoCallback) {
-                confirmacaoCallback();
-                fecharModalConfirmacao();
+        window.mostrarConfirmacao = function(titulo, texto, callback) {
+            const modal = document.getElementById('modal-confirmacao');
+            const tituloEl = document.getElementById('modal-confirmacao-titulo');
+            const textoEl = document.getElementById('modal-confirmacao-texto');
+            
+            if (!modal || !tituloEl || !textoEl) {
+                console.error('Elementos do modal não encontrados', {modal, tituloEl, textoEl});
+                if (confirm(texto)) {
+                    callback();
+                }
+                return;
             }
-        });
+            
+            tituloEl.textContent = titulo;
+            textoEl.textContent = texto;
+            confirmacaoCallback = callback;
+            
+            // Remove qualquer display inline e força flex
+            modal.style.display = '';
+            modal.style.display = 'flex';
+            modal.style.zIndex = '2000';
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            
+            console.log('Modal deve estar visível agora');
+        };
         
-        document.getElementById('modal-confirmacao').addEventListener('click', function(e) {
-            if (e.target === this) {
-                fecharModalConfirmacao();
+        window.fecharModalConfirmacao = function() {
+            const modal = document.getElementById('modal-confirmacao');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            confirmacaoCallback = null;
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnConfirmar = document.getElementById('modal-confirmacao-confirmar');
+            const modal = document.getElementById('modal-confirmacao');
+            
+            if (btnConfirmar) {
+                btnConfirmar.addEventListener('click', function() {
+                    if (confirmacaoCallback) {
+                        confirmacaoCallback();
+                        window.fecharModalConfirmacao();
+                    }
+                });
+            }
+            
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        window.fecharModalConfirmacao();
+                    }
+                });
             }
         });
     </script>

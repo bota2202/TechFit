@@ -63,7 +63,162 @@ $totalUnidades = count($unidades);
     <link rel="alternate icon" href="../Public/favicon.svg">
     <link rel="stylesheet" href="../Public/css/nav.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Define função global IMEDIATAMENTE no head para estar disponível quando o HTML for renderizado
+        window.abrirModalEditarUsuario = function(btn, e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            console.log('Botão de editar clicado!', btn);
+            
+            const id = btn.getAttribute('data-id');
+            const nome = btn.getAttribute('data-nome') || '';
+            const email = btn.getAttribute('data-email') || '';
+            const cpf = btn.getAttribute('data-cpf') || '';
+            const telefone = btn.getAttribute('data-telefone') || '';
+            const tipo = btn.getAttribute('data-tipo') || '3';
+            const estado = btn.getAttribute('data-estado') || '';
+            const cidade = btn.getAttribute('data-cidade') || '';
+            const bairro = btn.getAttribute('data-bairro') || '';
+            const rua = btn.getAttribute('data-rua') || '';
+            
+            console.log('Dados:', {id, nome, email});
+            
+            const usuarioId = document.getElementById('usuario_id');
+            const usuarioNome = document.getElementById('usuario_nome');
+            const usuarioEmail = document.getElementById('usuario_email');
+            const usuarioCpf = document.getElementById('usuario_cpf');
+            const usuarioTelefone = document.getElementById('usuario_telefone');
+            const usuarioTipo = document.getElementById('usuario_tipo');
+            const usuarioEstado = document.getElementById('usuario_estado');
+            const usuarioCidade = document.getElementById('usuario_cidade');
+            const usuarioBairro = document.getElementById('usuario_bairro');
+            const usuarioRua = document.getElementById('usuario_rua');
+            const usuarioSenha = document.getElementById('usuario_senha');
+            
+            if (usuarioId) usuarioId.value = id || '';
+            if (usuarioNome) usuarioNome.value = nome;
+            if (usuarioEmail) usuarioEmail.value = email;
+            if (usuarioCpf) usuarioCpf.value = cpf;
+            if (usuarioTelefone) usuarioTelefone.value = telefone;
+            if (usuarioTipo) usuarioTipo.value = tipo;
+            if (usuarioEstado) usuarioEstado.value = estado;
+            if (usuarioCidade) usuarioCidade.value = cidade;
+            if (usuarioBairro) usuarioBairro.value = bairro;
+            if (usuarioRua) usuarioRua.value = rua;
+            if (usuarioSenha) usuarioSenha.value = '';
+            
+            const modalElement = document.getElementById('modalEditarUsuario');
+            if (!modalElement) {
+                console.error('Modal não encontrado!');
+                alert('Erro: Modal não encontrado');
+                return;
+            }
+            
+            console.log('Modal encontrado, tentando abrir...');
+            
+            // Tenta usar Bootstrap primeiro
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                try {
+                    let modal = bootstrap.Modal.getInstance(modalElement);
+                    if (!modal) {
+                        console.log('Criando nova instância do modal Bootstrap');
+                        modal = new bootstrap.Modal(modalElement, {
+                            backdrop: true,
+                            keyboard: true
+                        });
+                    }
+                    console.log('Mostrando modal Bootstrap');
+                    modal.show();
+                    return;
+                } catch (error) {
+                    console.error('Erro ao usar Bootstrap Modal:', error);
+                }
+            } else {
+                console.warn('Bootstrap não está disponível, usando fallback');
+            }
+            
+            // Fallback manual
+            console.log('Usando fallback manual para mostrar modal');
+            
+            // Remove backdrop existente se houver
+            const existingBackdrop = document.getElementById('modal-backdrop-editar');
+            if (existingBackdrop) {
+                existingBackdrop.remove();
+            }
+            
+            // Cria backdrop primeiro
+            const backdrop = document.createElement('div');
+            backdrop.className = 'modal-backdrop fade show';
+            backdrop.id = 'modal-backdrop-editar';
+            backdrop.style.position = 'fixed';
+            backdrop.style.top = '0';
+            backdrop.style.left = '0';
+            backdrop.style.width = '100%';
+            backdrop.style.height = '100%';
+            backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            backdrop.style.zIndex = '1040';
+            backdrop.addEventListener('click', function() {
+                window.fecharModalEditarUsuario();
+            });
+            document.body.appendChild(backdrop);
+            
+            // Agora mostra o modal
+            modalElement.style.display = 'block';
+            modalElement.classList.add('show');
+            modalElement.setAttribute('aria-hidden', 'false');
+            modalElement.setAttribute('aria-modal', 'true');
+            modalElement.style.zIndex = '1050';
+            modalElement.style.position = 'fixed';
+            modalElement.style.top = '0';
+            modalElement.style.left = '0';
+            modalElement.style.width = '100%';
+            modalElement.style.height = '100%';
+            modalElement.style.display = 'flex';
+            modalElement.style.alignItems = 'center';
+            modalElement.style.justifyContent = 'center';
+            
+            const modalDialog = modalElement.querySelector('.modal-dialog');
+            if (modalDialog) {
+                modalDialog.style.position = 'relative';
+                modalDialog.style.zIndex = '1051';
+            }
+            
+            document.body.classList.add('modal-open');
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = '0px';
+            
+            console.log('Modal deve estar visível agora');
+        };
+        
+        window.fecharModalEditarUsuario = function() {
+            const modalElement = document.getElementById('modalEditarUsuario');
+            if (modalElement) {
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    if (modal) {
+                        modal.hide();
+                        return;
+                    }
+                }
+                modalElement.style.display = 'none';
+                modalElement.classList.remove('show');
+                modalElement.setAttribute('aria-hidden', 'true');
+                modalElement.setAttribute('aria-modal', 'false');
+            }
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            const backdrop = document.getElementById('modal-backdrop-editar');
+            if (backdrop) {
+                backdrop.remove();
+            }
+        };
+    </script>
     <style>
         body {
             background: #f5f5f5;
@@ -512,21 +667,22 @@ $totalUnidades = count($unidades);
                                         ?>
                                         <span class="badge bg-<?php echo $tipoBadge; ?>"><?php echo $tipoNome; ?> (<?php echo $tipo; ?>)</span>
                                     </td>
-                                    <td><?php echo htmlspecialchars($user->getCidade()); ?></td>
-                                    <td><?php echo htmlspecialchars($user->getEstado()); ?></td>
-                                    <td><?php echo htmlspecialchars($user->getTelefone()); ?></td>
+                                    <td><?php echo htmlspecialchars($user->getCidade() ?? ''); ?></td>
+                                    <td><?php echo htmlspecialchars($user->getEstado() ?? ''); ?></td>
+                                    <td><?php echo htmlspecialchars($user->getTelefone() ?? ''); ?></td>
                                     <td class="table-actions">
-                                        <button class="btn btn-sm btn-warning btn-editar-usuario" 
+                                        <button type="button" class="btn btn-sm btn-warning btn-editar-usuario" 
                                                 data-id="<?php echo $user->getId(); ?>"
                                                 data-nome="<?php echo htmlspecialchars($user->getNome(), ENT_QUOTES); ?>"
                                                 data-email="<?php echo htmlspecialchars($user->getEmail(), ENT_QUOTES); ?>"
                                                 data-cpf="<?php echo htmlspecialchars($user->getCpf(), ENT_QUOTES); ?>"
-                                                data-telefone="<?php echo htmlspecialchars($user->getTelefone(), ENT_QUOTES); ?>"
+                                                data-telefone="<?php echo htmlspecialchars($user->getTelefone() ?? '', ENT_QUOTES); ?>"
                                                 data-tipo="<?php echo $user->getTipo(); ?>"
                                                 data-estado="<?php echo htmlspecialchars($user->getEstado() ?? '', ENT_QUOTES); ?>"
                                                 data-cidade="<?php echo htmlspecialchars($user->getCidade() ?? '', ENT_QUOTES); ?>"
                                                 data-bairro="<?php echo htmlspecialchars($user->getBairro() ?? '', ENT_QUOTES); ?>"
-                                                data-rua="<?php echo htmlspecialchars($user->getRua() ?? '', ENT_QUOTES); ?>">
+                                                data-rua="<?php echo htmlspecialchars($user->getRua() ?? '', ENT_QUOTES); ?>"
+                                                onclick="abrirModalEditarUsuario(this, event)">
                                             <i class="fas fa-edit"></i> Editar
                                         </button>
                                         <?php if ($user->getTipo() == TIPO_USUARIO_ALUNO): ?>
@@ -972,7 +1128,7 @@ $totalUnidades = count($unidades);
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Editar Usuário</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" onclick="fecharModalEditarUsuario()" aria-label="Close"></button>
                 </div>
                 <form action="<?php echo getActionUrl('usuario-atualizar'); ?>" method="POST" id="formEditarUsuario">
                     <input type="hidden" name="id" id="usuario_id">
@@ -1008,21 +1164,21 @@ $totalUnidades = count($unidades);
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Estado</label>
-                                <input type="text" name="estado" id="usuario_estado" class="form-control" required>
+                                <input type="text" name="estado" id="usuario_estado" class="form-control">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Cidade</label>
-                                <input type="text" name="cidade" id="usuario_cidade" class="form-control" required>
+                                <input type="text" name="cidade" id="usuario_cidade" class="form-control">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Bairro</label>
-                                <input type="text" name="bairro" id="usuario_bairro" class="form-control" required>
+                                <input type="text" name="bairro" id="usuario_bairro" class="form-control">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Rua</label>
-                                <input type="text" name="rua" id="usuario_rua" class="form-control" required>
+                                <input type="text" name="rua" id="usuario_rua" class="form-control">
                             </div>
                         </div>
                         <div class="mb-3">
@@ -1032,7 +1188,7 @@ $totalUnidades = count($unidades);
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-secondary" onclick="fecharModalEditarUsuario()">Cancelar</button>
                         <button type="submit" class="btn btn-primary-custom">Salvar Alterações</button>
                     </div>
                 </form>
@@ -1158,43 +1314,44 @@ $totalUnidades = count($unidades);
             if (dataFimHidden) dataFimHidden.value = data.value + ' ' + horaFim + ':00';
         }
         
+        // Usa delegação de eventos para garantir que funcione mesmo com elementos dinâmicos
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.btn-editar-usuario')) {
+                const btn = e.target.closest('.btn-editar-usuario');
+                window.abrirModalEditarUsuario(btn, e);
+            }
+        });
+        
+        // Também adiciona event listeners diretos quando o DOM estiver pronto
         document.addEventListener('DOMContentLoaded', function() {
-            const botoesEditar = document.querySelectorAll('.btn-editar-usuario');
-            botoesEditar.forEach(function(botao) {
-                botao.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const nome = this.getAttribute('data-nome') || '';
-                    const email = this.getAttribute('data-email') || '';
-                    const cpf = this.getAttribute('data-cpf') || '';
-                    const telefone = this.getAttribute('data-telefone') || '';
-                    const tipo = this.getAttribute('data-tipo') || '3';
-                    const estado = this.getAttribute('data-estado') || '';
-                    const cidade = this.getAttribute('data-cidade') || '';
-                    const bairro = this.getAttribute('data-bairro') || '';
-                    const rua = this.getAttribute('data-rua') || '';
-                    
-                    document.getElementById('usuario_id').value = id || '';
-                    document.getElementById('usuario_nome').value = nome;
-                    document.getElementById('usuario_email').value = email;
-                    document.getElementById('usuario_cpf').value = cpf;
-                    document.getElementById('usuario_telefone').value = telefone;
-                    document.getElementById('usuario_tipo').value = tipo;
-                    document.getElementById('usuario_estado').value = estado;
-                    document.getElementById('usuario_cidade').value = cidade;
-                    document.getElementById('usuario_bairro').value = bairro;
-                    document.getElementById('usuario_rua').value = rua;
-                    document.getElementById('usuario_senha').value = '';
-                    
-                    const modalElement = document.getElementById('modalEditarUsuario');
-                    if (modalElement) {
-                        const modal = new bootstrap.Modal(modalElement);
-                        modal.show();
-                    } else {
-                        console.error('Modal não encontrado');
-                        mostrarMensagem('Erro', 'Erro: Modal não encontrado');
-                    }
+            // Adiciona listeners diretos aos botões existentes
+            setTimeout(function() {
+                const botoes = document.querySelectorAll('.btn-editar-usuario');
+                console.log('Botões encontrados no DOMContentLoaded:', botoes.length);
+                botoes.forEach(function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.abrirModalEditarUsuario(this, e);
+                    });
                 });
-            });
+            }, 500);
+        });
+        
+        window.mostrarConfirmacao = function(titulo, texto, callback) {
+            document.getElementById('modalConfirmacaoTitulo').textContent = titulo;
+            document.getElementById('modalConfirmacaoTexto').textContent = texto;
+            const btnConfirmar = document.getElementById('modalConfirmacaoBtn');
+            btnConfirmar.onclick = function() {
+                callback();
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirmacao'));
+                modal.hide();
+            };
+            const modal = new bootstrap.Modal(document.getElementById('modalConfirmacao'));
+            modal.show();
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
             
             const modalTurma = document.getElementById('modalTurma');
             if (modalTurma) {
@@ -1213,27 +1370,14 @@ $totalUnidades = count($unidades);
                         const tipo = form.getAttribute('data-tipo');
                         const nome = form.getAttribute('data-nome');
                         const mensagem = `Tem certeza que deseja deletar este ${tipo}${nome ? ' (' + nome + ')' : ''}?`;
-                        mostrarConfirmacao('Confirmar Exclusão', mensagem, () => {
+                        window.mostrarConfirmacao('Confirmar Exclusão', mensagem, () => {
                             form.submit();
                         });
                     });
                 }
             });
-            
-            function mostrarConfirmacao(titulo, texto, callback) {
-                document.getElementById('modalConfirmacaoTitulo').textContent = titulo;
-                document.getElementById('modalConfirmacaoTexto').textContent = texto;
-                const btnConfirmar = document.getElementById('modalConfirmacaoBtn');
-                btnConfirmar.onclick = function() {
-                    callback();
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirmacao'));
-                    modal.hide();
-                };
-                const modal = new bootstrap.Modal(document.getElementById('modalConfirmacao'));
-                modal.show();
-            }
+        });
             
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

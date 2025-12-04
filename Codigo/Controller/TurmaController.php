@@ -28,6 +28,7 @@ class TurmaController
         $dataFimTurma = $_POST['data_fim_turma'] ?? '';
         $diasSemana = $_POST['dias_semana'] ?? [];
         $duracao = intval($_POST['duracao'] ?? 60);
+        $horaInicio = $_POST['hora_inicio'] ?? '';
 
         if (!$idCurso || !$responsavel || !$nome || !$dataInicio || !$dataFim || !$dataFimTurma || empty($diasSemana)) {
             $_SESSION['erro'] = 'Preencha todos os campos obrigatórios!';
@@ -49,15 +50,26 @@ class TurmaController
             $dataAtual = clone $dataInicioObj;
             $dataAtual->setTime(0, 0, 0);
             
-            $horarioInicio = new DateTime($dataInicio);
-            $horaInicio = $horarioInicio->format('H:i');
+            // Extrai hora de início do POST ou do dataInicio
+            if ($horaInicio) {
+                $horaInicioFormatada = $horaInicio;
+                if (strlen($horaInicioFormatada) == 5) {
+                    $horaInicioFormatada .= ':00';
+                }
+            } else {
+                $horarioInicio = new DateTime($dataInicio);
+                $horaInicioFormatada = $horarioInicio->format('H:i:s');
+            }
+            
+            // Para o loop, usa apenas H:i
+            $horaInicioLoop = substr($horaInicioFormatada, 0, 5);
             
             while ($dataAtual <= $dataFimTurmaObj) {
                 $diaSemana = (int)$dataAtual->format('w');
                 
                 if (in_array($diaSemana, $diasSemanaInt)) {
                     $dataAula = clone $dataAtual;
-                    list($hora, $minuto) = explode(':', $horaInicio);
+                    list($hora, $minuto) = explode(':', $horaInicioLoop);
                     $dataAula->setTime($hora, $minuto, 0);
                     
                     $dataFimAula = clone $dataAula;
@@ -95,7 +107,11 @@ class TurmaController
                 $horario,
                 $capacidadeMaxima
             );
-            $idTurma = $this->dao->cadastrar($turma);
+            
+            // Converte dias da semana para string
+            $diasSemanaStr = implode(',', $diasSemanaInt);
+            
+            $idTurma = $this->dao->cadastrar($turma, $horaInicioFormatada, $diasSemanaStr, $duracao);
             
             $dataAtual = clone $dataInicioObj;
             $dataAtual->setTime(0, 0, 0);
@@ -105,7 +121,7 @@ class TurmaController
                 
                 if (in_array($diaSemana, $diasSemanaInt)) {
                     $dataAula = clone $dataAtual;
-                    list($hora, $minuto) = explode(':', $horaInicio);
+                    list($hora, $minuto) = explode(':', $horaInicioLoop);
                     $dataAula->setTime($hora, $minuto, 0);
                     
                     $dataFimAula = clone $dataAula;
@@ -138,13 +154,13 @@ class TurmaController
             header('Location: ' . getViewUrl('dashboard_admin.php'));
             exit;
         } catch (PDOException $e) {
-            error_log("Erro ao cadastrar turma: " . $e->getMessage());
-            $_SESSION['erro'] = 'Erro ao cadastrar turma. Tente novamente.';
+            error_log("Erro ao cadastrar turma: " . $e->getMessage() . " | Trace: " . $e->getTraceAsString());
+            $_SESSION['erro'] = 'Erro ao cadastrar turma: ' . $e->getMessage();
             header('Location: ' . getViewUrl('dashboard_admin.php'));
             exit;
         } catch (Exception $e) {
-            error_log("Erro geral ao cadastrar turma: " . $e->getMessage());
-            $_SESSION['erro'] = 'Erro ao processar. Tente novamente.';
+            error_log("Erro geral ao cadastrar turma: " . $e->getMessage() . " | Trace: " . $e->getTraceAsString());
+            $_SESSION['erro'] = 'Erro ao processar: ' . $e->getMessage();
             header('Location: ' . getViewUrl('dashboard_admin.php'));
             exit;
         }
